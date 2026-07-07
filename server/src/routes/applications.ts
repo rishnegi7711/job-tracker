@@ -38,7 +38,7 @@ router.post("/", protect, async (req: Request, res: Response) => {
     });
     res
       .status(201)
-      .json({ message: "Application created", userId: req.userId });
+      .json({ message: "Application created", createdApplication });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Application not created" });
@@ -76,6 +76,45 @@ router.delete("/:id", protect, async (req: Request, res: Response) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Application not deleted" });
+  }
+});
+
+router.patch("/:id", protect, async (req: Request, res: Response) => {
+  try {
+    const applicationId = req.params.id as string;
+    if (!req.userId) {
+      res.status(401).json({ error: "Not Authorized" });
+      return;
+    }
+    const application = await prisma.application.findUnique({
+      where: { id: applicationId },
+    });
+    if (!application) {
+      res.status(404).json({ error: "Application not found" });
+      return;
+    }
+    if (application.userId !== req.userId) {
+      res.status(403).json({
+        error: "Application can only be updated by the authorized user",
+      });
+      return;
+    }
+    const partialApplication = ApplicationSchema.partial().safeParse(req.body);
+
+    if (!partialApplication.success) {
+      res
+        .status(400)
+        .json({ error: partialApplication.error.flatten().fieldErrors });
+      return;
+    }
+    const updatedApplication = await prisma.application.update({
+      where: { id: applicationId },
+      data: partialApplication.data,
+    });
+    res.status(200).json(updatedApplication);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Application patch failed" });
   }
 });
 export default router;
