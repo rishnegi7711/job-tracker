@@ -40,7 +40,7 @@ const CreateApplicationForm = () => {
   };
 
   return (
-    <div className="justify-cjustify-center">
+    <div className="justify-center">
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>
           Company: <input {...register("company")} type="text" />
