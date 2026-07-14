@@ -1,29 +1,34 @@
 import "./App.css";
-import { useQuery } from "@tanstack/react-query";
-import CreateApplicationForm from "./components/CreateApplicationForm";
-
-const fetchApplications = async () => {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/applications`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return res.json();
-};
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import BoardView from "./pages/BoardView";
+import LoginPage from "./pages/LoginPage";
+import DetailView from "./pages/DetailView";
 
 function App() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["applications"],
-    queryFn: fetchApplications,
-  });
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error fetching applications</p>;
   return (
-    <>
-      <CreateApplicationForm />
-      <pre>{JSON.stringify(data, null, 2)} </pre>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <BoardView />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/applications/:id"
+          element={
+            <ProtectedRoute>
+              <DetailView />
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route path="*" element={<Navigate to="/" replace />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
