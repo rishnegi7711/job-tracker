@@ -1,5 +1,6 @@
 import "./App.css";
 import { useQuery } from "@tanstack/react-query";
+import CreateApplicationForm from "./components/CreateApplicationForm";
 
 const fetchApplications = async () => {
   const token = localStorage.getItem("token");
@@ -20,6 +21,7 @@ function App() {
   if (isError) return <p>Error fetching applications</p>;
   return (
     <>
+      <CreateApplicationForm />
       <pre>{JSON.stringify(data, null, 2)} </pre>
     </>
   );
