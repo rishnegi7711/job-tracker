@@ -1,7 +1,8 @@
-import { Request, Response, Router } from "express";
+import { application, Request, Response, Router } from "express";
 import protect from "../middleware/protect";
 import prisma from "../lib/prisma";
 import { ApplicationSchema } from "../schemas/application";
+import { InterviewRoundSchema } from "../schemas/interviewRound";
 
 const router = Router();
 
@@ -133,17 +134,86 @@ router.get("/:id", protect, async (req: Request, res: Response) => {
       return;
     }
     if (application.userId !== req.userId) {
-      res
-        .status(403)
-        .json({
-          error: "Application can only be viewed by the authorized user",
-        });
+      res.status(403).json({
+        error: "Application can only be viewed by the authorized user",
+      });
       return;
     }
     res.status(200).json(application);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Cannot get the required application" });
+  }
+});
+
+router.get("/:id/rounds", protect, async (req: Request, res: Response) => {
+  try {
+    const applicationId = req.params.id as string;
+    if (!req.userId) {
+      res.status(401).json({ error: "Not Authorized" });
+      return;
+    }
+    const parentApplication = await prisma.application.findUnique({
+      where: { id: applicationId },
+    });
+    if (!parentApplication) {
+      res.status(404).json({ error: "Application not found" });
+      return;
+    }
+    if (req.userId !== parentApplication.userId) {
+      res
+        .status(403)
+        .json({
+          error: "Application can only be viewed by the authorised user",
+        });
+      return;
+    }
+    const interviewRounds = await prisma.interviewRound.findMany({
+      where: { applicationId },
+    });
+    res.status(200).json(interviewRounds);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Could not get interview rounds" });
+  }
+});
+
+router.post("/:id/rounds", protect, async (req: Request, res: Response) => {
+  try {
+    const parsed = InterviewRoundSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.flatten().fieldErrors });
+      return;
+    }
+    const applicationId = req.params.id as string;
+    if (!req.userId) {
+      res.status(401).json({ error: "Not Authorized" });
+      return;
+    }
+    const parentApplication = await prisma.application.findUnique({
+      where: { id: applicationId },
+    });
+    if (!parentApplication) {
+      res.status(404).json({ error: "Application not found" });
+      return;
+    }
+    if (parentApplication.userId !== req.userId) {
+      res.status(403).json({
+        error: "Application can only be viewed by the authorized user",
+      });
+      return;
+    }
+
+    const createdInterviewRound = await prisma.interviewRound.create({
+      data: {
+        ...parsed.data,
+        applicationId: applicationId,
+      },
+    });
+    res.status(201).json(createdInterviewRound);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not create interview round" });
   }
 });
 export default router;
