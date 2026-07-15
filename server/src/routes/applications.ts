@@ -117,4 +117,33 @@ router.patch("/:id", protect, async (req: Request, res: Response) => {
     res.status(500).json({ error: "Application patch failed" });
   }
 });
+
+router.get("/:id", protect, async (req: Request, res: Response) => {
+  try {
+    const applicationId = req.params.id as string;
+    if (!req.userId) {
+      res.status(401).json({ error: "Not Authorized" });
+      return;
+    }
+    const application = await prisma.application.findUnique({
+      where: { id: applicationId },
+    });
+    if (!application) {
+      res.status(404).json({ error: "Application not found" });
+      return;
+    }
+    if (application.userId !== req.userId) {
+      res
+        .status(403)
+        .json({
+          error: "Application can only be viewed by the authorized user",
+        });
+      return;
+    }
+    res.status(200).json(application);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Cannot get the required application" });
+  }
+});
 export default router;
