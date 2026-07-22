@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import CreateApplicationForm from "../components/CreateApplicationForm";
+import { Link } from "react-router-dom";
 
 const fetchApplications = async () => {
   const token = localStorage.getItem("token");
@@ -21,7 +22,19 @@ const BoardView = () => {
   return (
     <>
       <CreateApplicationForm />
-      <pre>{JSON.stringify(data, null, 2)} </pre>
+      {data.map((application) => {
+        return (
+          <Link key={application.id} to={`/applications/${application.id}`}>
+            <ul>
+              <li>{application.company}</li>
+              <li>{application.role}</li>
+              <li>{application.status}</li>
+              <li>{application.dateApplied}</li>
+              <li>{application.notes}</li>
+            </ul>
+          </Link>
+        );
+      })}
     </>
   );
 };
