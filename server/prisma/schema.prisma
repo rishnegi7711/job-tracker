@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  hashedPassword String
+  applications   Application[]
+}
+
+model Application {
+  id              String           @id @default(cuid())
+  company         String
+  role            String
+  status          String
+  dateApplied     DateTime         @default(now())
+  notes           String?
+  userId          String
+  user            User             @relation(fields: [userId], references: [id])
+  interviewRounds InterviewRound[]
+}
+
+model InterviewRound {
+  id            String      @id @default(cuid())
+  type          String
+  date          DateTime
+  outcome       String?
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id])
+}
