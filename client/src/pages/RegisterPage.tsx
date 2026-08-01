@@ -39,7 +39,7 @@ const sendRegistrationData = async (data: RegisterInput) => {
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending, isError, error, reset } = useMutation({
     mutationFn: sendRegistrationData,
     onSuccess: () => {
       navigate("/login");
@@ -75,7 +75,15 @@ const RegisterPage = () => {
           >
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Email</Label>
-              <Input {...register("email")} type="email" id="email" />
+              <Input
+                {...register("email")}
+                onChange={async (e) => {
+                  await register("email").onChange(e);
+                  reset();
+                }}
+                type="email"
+                id="email"
+              />
               {errors.email && (
                 <div className="text-red-500">{errors.email.message}</div>
               )}

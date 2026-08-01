@@ -44,7 +44,7 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(loginSchema) });
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending, isError, error, reset } = useMutation({
     mutationFn: sendLoginData,
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
@@ -76,14 +76,30 @@ const LoginPage = () => {
           >
             <div className=" flex flex-col gap-3">
               <Label htmlFor="email">Email</Label>
-              <Input {...register("email")} type="email" id="email" />
+              <Input
+                {...register("email")}
+                onChange={async (e) => {
+                  await register("email").onChange(e);
+                  reset();
+                }}
+                type="email"
+                id="email"
+              />
               {errors.email && (
                 <div className="text-red-500">{errors.email.message}</div>
               )}
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="password">Password</Label>
-              <Input {...register("password")} type="password" id="password" />
+              <Input
+                {...register("password")}
+                onChange={async (e) => {
+                  await register("password").onChange(e);
+                  reset();
+                }}
+                type="password"
+                id="password"
+              />
               {errors.password && (
                 <div className="text-red-500">{errors.password.message}</div>
               )}
