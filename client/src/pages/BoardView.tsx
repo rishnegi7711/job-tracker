@@ -3,10 +3,11 @@ import CreateApplicationForm from "../components/CreateApplicationForm";
 // import { Link } from "react-router-dom";
 import KanbanColumn from "@/components/KanbanColumn";
 import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
+import { env } from "@/env";
 
 const fetchApplications = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/applications`, {
+  const res = await fetch(`${env.VITE_API_URL}/api/applications`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

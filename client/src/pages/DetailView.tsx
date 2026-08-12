@@ -1,26 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import AddRoundForm from "../components/AddRoundForm";
+import { env } from "@/env";
 
 const fetchApplication = async (id: string) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/applications/${id}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  );
+  const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return res.json();
 };
 
 const fetchRounds = async (id: string) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/applications/${id}/rounds`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  );
+  const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}/rounds`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return res.json();
 };
 

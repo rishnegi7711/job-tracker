@@ -25,10 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { env } from "@/env";
 
 const createApplication = async (data: ApplicationInput) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/applications`, {
+  const res = await fetch(`${env.VITE_API_URL}/api/applications`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,

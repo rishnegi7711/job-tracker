@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import z from "zod";
+import { env } from "@/env";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -23,7 +24,7 @@ const registerSchema = z.object({
 type RegisterInput = z.infer<typeof registerSchema>;
 
 const sendRegistrationData = async (data: RegisterInput) => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+  const res = await fetch(`${env.VITE_API_URL}/api/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

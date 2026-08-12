@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { env } from "@/env";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -23,7 +24,7 @@ const loginSchema = z.object({
 type LoginInput = z.infer<typeof loginSchema>;
 
 const sendLoginData = async (data: LoginInput) => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+  const res = await fetch(`${env.VITE_API_URL}/api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -5,21 +5,19 @@ import {
 } from "../../../server/src/schemas/interviewRound";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { env } from "@/env";
 
 const createRoundForm = async (data: InterviewRoundInput, id: string) => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/applications/${id}/rounds`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+  const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}/rounds`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(data),
+  });
   return res.json();
 };
 
