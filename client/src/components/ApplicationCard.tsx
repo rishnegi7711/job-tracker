@@ -2,7 +2,7 @@ import { formatDate } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "./ui/card";
 
-type ApplicationCardProps = {
+export type ApplicationCardProps = {
   application: {
     id: string;
     company: string;

@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import CreateApplicationForm from "../components/CreateApplicationForm";
 // import { Link } from "react-router-dom";
-import ApplicationCard from "@/components/ApplicationCard";
+import KanbanColumn from "@/components/KanbanColumn";
+import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
 
 const fetchApplications = async () => {
   const token = localStorage.getItem("token");
@@ -23,27 +24,15 @@ const BoardView = () => {
   return (
     <>
       <CreateApplicationForm />
-      <ApplicationCard
-        application={{
-          id: "test123",
-          company: "Test Co",
-          role: "Frontend Engineer",
-          dateApplied: "2026-07-18T00:00:00.000Z",
-        }}
-      />
-      {/*{data.map((application) => {
-        return (
-          <Link key={application.id} to={`/applications/${application.id}`}>
-            <ul>
-              <li>{application.company}</li>
-              <li>{application.role}</li>
-              <li>{application.status}</li>
-              <li>{application.dateApplied}</li>
-              <li>{application.notes}</li>
-            </ul>
-          </Link>
-        );
-      })}*/}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {APPLICATION_STATUSES.map((status) => (
+          <KanbanColumn
+            key={status}
+            status={status}
+            applications={data.filter((app) => app.status === status)}
+          />
+        ))}
+      </div>
     </>
   );
 };
