@@ -12,4 +12,7 @@ export const ApplicationSchema = z.object({
   role: z.string().min(1, "Role is required"),
   status: z.enum(APPLICATION_STATUSES, { message: "Please select a status" }),
   dateApplied: z.coerce.date({ message: "Please select a date" }),
-  notes: z.string().optional(
+  notes: z.string().optional(),
+});
+
+export type ApplicationInput = z.infer<typeof ApplicationSchema>;

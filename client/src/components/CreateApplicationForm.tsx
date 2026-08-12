@@ -181,4 +181,28 @@ const CreateApplicationForm = () => {
             <Textarea
               id="notes"
               className="resize-none text-sm leading-relaxed"
-         
+              {...register("notes")}
+            />
+          </div>
+          <Button
+            type="submit"
+            className="mt-1 w-full h-9 text-sm font-medium gap-1.5"
+            disabled={isPending}
+          >
+            {" "}
+            {isPending ? (
+              "Adding..."
+            ) : (
+              <>
+                {" "}
+                <PlusIcon data-icon="inline-start" /> Add Application{" "}
+              </>
+            )}{" "}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default CreateApplicationForm;
