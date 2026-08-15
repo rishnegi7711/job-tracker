@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import CreateApplicationForm from "../components/CreateApplicationForm";
-// import { Link } from "react-router-dom";
 import KanbanColumn from "@/components/KanbanColumn";
+import TopBar from "@/components/Topbar";
 import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
 import { env } from "@/env";
 
@@ -24,7 +24,7 @@ const BoardView = () => {
   if (isError) return <p>Error fetching applications</p>;
   return (
     <>
-      <CreateApplicationForm />
+      <TopBar />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {APPLICATION_STATUSES.map((status) => (
           <KanbanColumn
