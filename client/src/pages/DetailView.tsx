@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import AddRoundForm from "../components/AddRoundForm";
+import AddRoundDialog from "../components/AddRoundDialog";
+import ApplicationHeader from "@/components/ApplicationHeader";
+import { InterviewRoundItem } from "@/components/InterviewRoundItem";
 import { env } from "@/env";
 
 const fetchApplication = async (id: string) => {
@@ -44,28 +46,23 @@ const DetailView = () => {
   if (applicationError || roundError) return <p className="text-6xl">Error</p>;
   return (
     <div>
-      <div className="bg-amber-300 text-black">
-        <p>{application.company}</p>
-        <p>{application.role}</p>
-        <p>{application.status}</p>
-        <p>{application.notes}</p>
-      </div>
+      <ApplicationHeader application={application} />
       {rounds.length == 0 ? (
         <p>No rounds yet</p>
       ) : (
-        <div>
-          {rounds.map((round) => {
+        <ol>
+          {rounds.map((round, index) => {
             return (
-              <div key={round.id}>
-                <li>{round.type}</li>
-                <li>{round.date}</li>
-                <li>{round.outcome}</li>
-              </div>
+              <InterviewRoundItem
+                key={round.id}
+                round={round}
+                isLast={index === rounds.length - 1}
+              />
             );
           })}
-        </div>
+        </ol>
       )}
-      <AddRoundForm applicationId={id as string} />
+      <AddRoundDialog applicationId={id as string} />
     </div>
   );
 };
