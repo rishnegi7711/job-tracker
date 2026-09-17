@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import AddRoundDialog from "../components/AddRoundDialog";
 import ApplicationHeader from "@/components/ApplicationHeader";
 import { InterviewRoundItem } from "@/components/InterviewRoundItem";
+import TopBar from "@/components/TopBar";
+import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { env } from "@/env";
 
 const fetchApplication = async (id: string) => {
@@ -42,28 +44,36 @@ const DetailView = () => {
     queryFn: () => fetchRounds(id as string),
   });
   if (applicationLoading || roundLoading)
-    return <p className="text-6xl">...Loading</p>;
+    return <p className="text-3xl text-muted-foreground">...Loading</p>;
   if (applicationError || roundError) return <p className="text-6xl">Error</p>;
   return (
-    <div>
-      <ApplicationHeader application={application} />
-      {rounds.length == 0 ? (
-        <p>No rounds yet</p>
-      ) : (
-        <ol>
-          {rounds.map((round, index) => {
-            return (
-              <InterviewRoundItem
-                key={round.id}
-                round={round}
-                isLast={index === rounds.length - 1}
-              />
-            );
-          })}
-        </ol>
-      )}
-      <AddRoundDialog applicationId={id as string} />
-    </div>
+    <>
+      <TopBar />
+      <div className="mx-auto max-w-7xl px-6 py-6 space-y-6">
+        <ApplicationHeader application={application} />
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Interview Rounds</h2>
+          <AddRoundDialog applicationId={id as string} />
+        </div>
+        {rounds.length == 0 ? (
+          <Empty className="border border-dashed py-10">
+            <EmptyDescription>No rounds yet</EmptyDescription>
+          </Empty>
+        ) : (
+          <ol>
+            {rounds.map((round, index) => {
+              return (
+                <InterviewRoundItem
+                  key={round.id}
+                  round={round}
+                  isLast={index === rounds.length - 1}
+                />
+              );
+            })}
+          </ol>
+        )}
+      </div>
+    </>
   );
 };
 
