@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import CreateApplicationForm from "../components/CreateApplicationForm";
 import KanbanColumn from "@/components/KanbanColumn";
-import TopBar from "@/components/Topbar";
+import TopBar from "@/components/TopBar";
 import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
 import { env } from "@/env";
 
@@ -25,14 +24,16 @@ const BoardView = () => {
   return (
     <>
       <TopBar />
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {APPLICATION_STATUSES.map((status) => (
-          <KanbanColumn
-            key={status}
-            status={status}
-            applications={data.filter((app) => app.status === status)}
-          />
-        ))}
+      <div className="mx-auto max-w-7xl px-6 py-5">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {APPLICATION_STATUSES.map((status) => (
+            <KanbanColumn
+              key={status}
+              status={status}
+              applications={data.filter((app) => app.status === status)}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
