@@ -4,7 +4,15 @@ import TopBar from "@/components/TopBar";
 import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
 import { env } from "@/env";
 
-const fetchApplications = async () => {
+type Application = {
+  id: string;
+  status: string;
+  company: string;
+  role: string;
+  dateApplied: string;
+};
+
+const fetchApplications = async (): Promise<Application[]> => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${env.VITE_API_URL}/api/applications`, {
     headers: {
@@ -30,7 +38,7 @@ const BoardView = () => {
             <KanbanColumn
               key={status}
               status={status}
-              applications={data.filter((app) => app.status === status)}
+              applications={(data ?? []).filter((app) => app.status === status)}
             />
           ))}
         </div>

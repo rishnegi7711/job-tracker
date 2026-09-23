@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BriefcaseIcon, PlusIcon } from "lucide-react";
 import {
-  Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,

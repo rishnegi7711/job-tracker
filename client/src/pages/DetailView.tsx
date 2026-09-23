@@ -6,6 +6,7 @@ import { InterviewRoundItem } from "@/components/InterviewRoundItem";
 import TopBar from "@/components/TopBar";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { env } from "@/env";
+import type { RawInterviewRound } from "@/components/InterviewRoundItem";
 
 const fetchApplication = async (id: string) => {
   const token = localStorage.getItem("token");
@@ -15,7 +16,7 @@ const fetchApplication = async (id: string) => {
   return res.json();
 };
 
-const fetchRounds = async (id: string) => {
+const fetchRounds = async (id: string): Promise<RawInterviewRound[]> => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}/rounds`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -55,18 +56,18 @@ const DetailView = () => {
           <h2 className="text-lg font-semibold">Interview Rounds</h2>
           <AddRoundDialog applicationId={id as string} />
         </div>
-        {rounds.length == 0 ? (
+        {(rounds ?? []).length == 0 ? (
           <Empty className="border border-dashed py-10">
             <EmptyDescription>No rounds yet</EmptyDescription>
           </Empty>
         ) : (
           <ol>
-            {rounds.map((round, index) => {
+            {(rounds ?? []).map((round, index) => {
               return (
                 <InterviewRoundItem
                   key={round.id}
                   round={round}
-                  isLast={index === rounds.length - 1}
+                  isLast={index === (rounds ?? []).length - 1}
                 />
               );
             })}
