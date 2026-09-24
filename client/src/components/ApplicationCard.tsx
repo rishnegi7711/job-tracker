@@ -1,14 +1,9 @@
 import { formatDate } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "./ui/card";
-
+import type { Application } from "@/lib/types";
 export type ApplicationCardProps = {
-  application: {
-    id: string;
-    company: string;
-    role: string;
-    dateApplied: string;
-  };
+  application: Application;
 };
 
 const ApplicationCard = ({ application }: ApplicationCardProps) => {

@@ -1,7 +1,7 @@
 import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
 import { cn } from "@/lib/utils";
 
-type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
+export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
 
 const STATUS_STYLES: Record<ApplicationStatus, string> = {
   Applied: "bg-sky-500/10 text-sky-400 border-sky-500/25",

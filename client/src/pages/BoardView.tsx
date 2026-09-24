@@ -5,14 +5,7 @@ import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
 import { env } from "@/env";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
-
-type Application = {
-  id: string;
-  status: string;
-  company: string;
-  role: string;
-  dateApplied: string;
-};
+import type { Application } from "@/lib/types";
 
 const fetchApplications = async (): Promise<Application[]> => {
   const token = localStorage.getItem("token");
