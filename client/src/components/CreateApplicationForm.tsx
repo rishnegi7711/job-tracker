@@ -6,7 +6,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BriefcaseIcon, PlusIcon } from "lucide-react";
+import { BriefcaseIcon, PlusIcon, Loader2 } from "lucide-react";
 import {
   DialogContent,
   DialogDescription,
@@ -190,7 +190,10 @@ const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
         >
           {" "}
           {isPending ? (
-            "Adding..."
+            <>
+              <Loader2 className="animate-spin size-4" />
+              Adding...
+            </>
           ) : (
             <>
               {" "}

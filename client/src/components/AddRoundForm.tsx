@@ -26,6 +26,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Loader2 } from "lucide-react";
 
 const createRoundForm = async (data: InterviewRoundInput, id: string) => {
   const token = localStorage.getItem("token");
@@ -178,7 +179,13 @@ const AddRoundForm = ({
           className="mt-1 w-full h-9 text-sm font-medium gap-1.5"
           disabled={isPending}
         >
-          {isPending ? "Adding..." : "Add Round"}
+          {isPending ? (
+            <>
+              <Loader2 className="animate-spin size-4" /> Adding Round
+            </>
+          ) : (
+            "Add Round"
+          )}
         </Button>
       </form>
     </DialogContent>

@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { env } from "@/env";
+import { Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -108,7 +109,13 @@ const LoginPage = () => {
             {isError && <p className="text-red-500 text-sm">{error.message}</p>}
 
             <Button disabled={isPending} type="submit" className="w-full">
-              {isPending ? "Logging In..." : "Log In"}
+              {isPending ? (
+                <>
+                  <Loader2 className="animate-spin size-4" /> Logging in
+                </>
+              ) : (
+                "Log In"
+              )}
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-muted-foreground">

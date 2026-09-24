@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import z from "zod";
 import { env } from "@/env";
+import { Loader2 } from "lucide-react";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -100,7 +101,14 @@ const RegisterPage = () => {
 
             {isError && <p className="text-red-500 text-sm">{error.message}</p>}
             <Button disabled={isPending} type="submit" className="w-full">
-              {isPending ? "Registering..." : "Register"}
+              {isPending ? (
+                <>
+                  <Loader2 className="animate-spin size-4" />
+                  Registering User
+                </>
+              ) : (
+                "Register"
+              )}
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
