@@ -1,11 +1,8 @@
 import OutcomeBadge from "@/components/OutcomeBadge";
-import type { InterviewRoundInput } from "../../../server/src/schemas/interviewRound";
 
-export type InterviewRound = InterviewRoundInput & { id: string };
-export type RawInterviewRound = Omit<InterviewRound, "date"> & { date: string };
+import type { InterviewRoundRecord } from "../../../server/src/schemas/interviewRound";
 
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
+function formatDate(date: Date) {
   return date.toLocaleDateString("en-GB", {
     month: "short",
     day: "numeric",
@@ -17,7 +14,7 @@ export function InterviewRoundItem({
   round,
   isLast,
 }: {
-  round: RawInterviewRound;
+  round: InterviewRoundRecord;
   isLast: boolean;
 }) {
   return (

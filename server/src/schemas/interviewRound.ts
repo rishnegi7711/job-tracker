@@ -22,4 +22,10 @@ export const InterviewRoundSchema = z.object({
   outcome: z.enum(INTERVIEW_ROUND_OUTCOMES),
 });
 
+export const InterviewRoundRecordSchema = InterviewRoundSchema.extend({
+  id: z.string(),
+  applicationId: z.string(),
+});
+
 export type InterviewRoundInput = z.infer<typeof InterviewRoundSchema>;
+export type InterviewRoundRecord = z.infer<typeof InterviewRoundRecordSchema>;

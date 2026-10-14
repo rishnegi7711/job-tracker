@@ -6,9 +6,10 @@ import { InterviewRoundItem } from "@/components/InterviewRoundItem";
 import TopBar from "@/components/TopBar";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { env } from "@/env";
-import type { RawInterviewRound } from "@/components/InterviewRoundItem";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
+import type { InterviewRoundRecord } from "../../../server/src/schemas/interviewRound";
+import { InterviewRoundRecordSchema } from "../../../server/src/schemas/interviewRound";
 
 const fetchApplication = async (id: string) => {
   const token = localStorage.getItem("token");
@@ -22,7 +23,7 @@ const fetchApplication = async (id: string) => {
   return res.json();
 };
 
-const fetchRounds = async (id: string): Promise<RawInterviewRound[]> => {
+const fetchRounds = async (id: string): Promise<InterviewRoundRecord[]> => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}/rounds`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -33,7 +34,8 @@ const fetchRounds = async (id: string): Promise<RawInterviewRound[]> => {
       errorBody.error || "Failed to fetch rounds for this application",
     );
   }
-  return res.json();
+  const data = await res.json();
+  return InterviewRoundRecordSchema.array().parse(data);
 };
 
 const DetailView = () => {
