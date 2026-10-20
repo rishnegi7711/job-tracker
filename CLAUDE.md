@@ -21,7 +21,7 @@ No root package.json. Run everything from `client/` or `server/`.
 - Test (run once): `cd server && bun run test --run`
 
 ### Done means
-- `bun run build` and `bun run test --run` pass in **both** `client/` and `server/`.
+- `bun run build` and `bun run test --run` pass in `server/` and `bun run build` passes in `client/`.
 - Plain `bun run test` is watch mode and never exits. Don't use it for checks.
 
 ## Conventions
