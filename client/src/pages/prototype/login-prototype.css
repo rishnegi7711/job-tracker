@@ -1,0 +1,33 @@
+/* PROTOTYPE: throwaway. Base styles are the END state; keyframes animate from hidden. */
+.lp { font-family: "Geist Variable", system-ui, sans-serif; }
+.lp-serif { font-family: ui-serif, "New York", Georgia, serif; }
+.lp-mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+@keyframes lp-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes lp-settle { from { opacity: 0; transform: translateY(-16px) scale(.96); } }
+@keyframes lp-sel { to { transform: translateY(192px); } }
+@keyframes lp-roll {
+  0%, 20% { transform: translateY(0); }
+  25%, 45% { transform: translateY(-20%); }
+  50%, 70% { transform: translateY(-40%); }
+  75%, 95% { transform: translateY(-60%); }
+  100% { transform: translateY(-80%); }
+}
+@keyframes lp-stamp { 0% { opacity: 0; scale: 1.9; } 60% { opacity: 1; scale: .96; } }
+@keyframes lp-shake { 20% { transform: translateX(-6px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+@keyframes lp-pulse { 50% { box-shadow: 0 0 0 6px rgba(120, 140, 255, 0); } 0% { box-shadow: 0 0 0 0 rgba(120, 140, 255, .55); } }
+
+.lp-rise { animation: lp-rise .7s cubic-bezier(.2, .8, .2, 1) both; animation-delay: var(--d, 0ms); }
+.lp-settle { animation: lp-settle .6s cubic-bezier(.2, .8, .2, 1) both; animation-delay: var(--d, 0ms); }
+.lp-sel { animation: lp-sel 8s steps(1) infinite alternate; }
+.lp-roll { animation: lp-roll 8s cubic-bezier(.7, 0, .2, 1) infinite; }
+.lp-stamp { animation: lp-stamp .5s cubic-bezier(.2, .9, .3, 1) both; }
+.lp-shake { animation: lp-shake .4s ease-in-out; }
+.lp-pulse { animation: lp-pulse 1.6s ease-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp *, .lp *::before, .lp *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

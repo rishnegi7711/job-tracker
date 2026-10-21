@@ -2,6 +2,7 @@ import z from "zod";
 
 const envSchema = z.object({
   VITE_API_URL: z.string().min(1, "VITE_API_URL is required"),
+  DEV: z.boolean(),
 });
 
 const parsed = envSchema.safeParse(import.meta.env);
