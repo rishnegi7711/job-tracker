@@ -11,7 +11,7 @@ describe("ApplicationSchema", () => {
       notes: "",
     };
     const result = ApplicationSchema.safeParse(badInput);
-    expect(result.success).toBe(true);
+    expect(result.success).toBe(false);
   });
   it("accepts valid application data", () => {
     const goodInput = {
