@@ -79,3 +79,9 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: one `GLOSSARY.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Install design skills
+
+`.claude/skills/` and `.agents/` are gitignored. After a fresh clone, reinstall from the repo root (Node 22+ and Chrome needed):
+- impeccable: `npx impeccable install --providers=claude --scope=project`. Update: `npx impeccable update`.
+- taste skill: `npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"`.
