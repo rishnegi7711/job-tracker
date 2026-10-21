@@ -1,0 +1,5 @@
+{
+  "name": "applyd",
+  "private": true,
+  "workspaces": ["client", "server"]
+}

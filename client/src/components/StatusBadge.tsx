@@ -1,4 +1,4 @@
-import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
+import { APPLICATION_STATUSES } from "server/src/schemas/application";
 import { cn } from "@/lib/utils";
 
 export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];

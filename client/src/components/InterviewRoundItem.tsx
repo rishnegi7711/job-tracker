@@ -1,6 +1,6 @@
 import OutcomeBadge from "@/components/OutcomeBadge";
 
-import type { InterviewRoundRecord } from "../../../server/src/schemas/interviewRound";
+import type { InterviewRoundRecord } from "server/src/schemas/interviewRound";
 
 function formatDate(date: Date) {
   return date.toLocaleDateString("en-GB", {

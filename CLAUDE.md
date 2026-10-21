@@ -4,17 +4,15 @@ Applyd is a full-stack app for tracking job applications and their interview rou
 
 ## Commands
 
-No root package.json. Run everything from `client/` or `server/`.
+Bun workspaces: install once from the repo root (`bun install --frozen-lockfile`). Run everything else from `client/` or `server/`. The client imports schemas as `server/src/schemas/...`.
 
 ### client/
-- Install: `cd client && bun install --frozen-lockfile`
 - Dev: `cd client && bun run dev`
 - Build (type-check + bundle): `cd client && bun run build`
 - Test (run once): `cd client && bun run test --run`
 - Lint: `cd client && bun run lint`
 
 ### server/
-- Install: `cd server && bun install --frozen-lockfile`
 - Dev: `cd server && bun run dev` (tsx watch)
 - Build (`prisma generate && tsc`): `cd server && bun run build`
 - Start (compiled): `cd server && bun run start`

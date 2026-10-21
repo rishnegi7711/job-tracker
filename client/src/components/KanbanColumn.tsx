@@ -1,7 +1,7 @@
 import ApplicationCard from "./ApplicationCard";
 import { Badge } from "@/components/ui/badge";
 import { Empty, EmptyDescription } from "@/components/ui/empty";
-import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
+import { APPLICATION_STATUSES } from "server/src/schemas/application";
 import type { ApplicationCardProps } from "./ApplicationCard";
 
 type Status = (typeof APPLICATION_STATUSES)[number];

@@ -8,10 +8,10 @@ import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { env } from "@/env";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
-import type { ApplicationRecord } from "../../../server/src/schemas/application";
-import { ApplicationRecordSchema } from "../../../server/src/schemas/application";
-import type { InterviewRoundRecord } from "../../../server/src/schemas/interviewRound";
-import { InterviewRoundRecordSchema } from "../../../server/src/schemas/interviewRound";
+import type { ApplicationRecord } from "server/src/schemas/application";
+import { ApplicationRecordSchema } from "server/src/schemas/application";
+import type { InterviewRoundRecord } from "server/src/schemas/interviewRound";
+import { InterviewRoundRecordSchema } from "server/src/schemas/interviewRound";
 
 const fetchApplication = async (id: string): Promise<ApplicationRecord> => {
   const token = localStorage.getItem("token");

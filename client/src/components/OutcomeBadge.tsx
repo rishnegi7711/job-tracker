@@ -1,4 +1,4 @@
-import { INTERVIEW_ROUND_OUTCOMES } from "../../../server/src/schemas/interviewRound";
+import { INTERVIEW_ROUND_OUTCOMES } from "server/src/schemas/interviewRound";
 import { cn } from "@/lib/utils";
 
 type InterviewRoundOutcomeStatus = (typeof INTERVIEW_ROUND_OUTCOMES)[number];

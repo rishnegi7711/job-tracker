@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "./ui/card";
 import StatusBadge from "./StatusBadge";
 import DeleteApplicationDialog from "./DeleteApplicationDialog";
-import type { ApplicationRecord } from "../../../server/src/schemas/application";
+import type { ApplicationRecord } from "server/src/schemas/application";
 
 const ApplicationHeader = ({ application }: { application: ApplicationRecord }) => {
   const navigate = useNavigate();

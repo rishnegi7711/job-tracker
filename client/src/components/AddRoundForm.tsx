@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   InterviewRoundSchema,
   type InterviewRoundInput,
-} from "../../../server/src/schemas/interviewRound";
+} from "server/src/schemas/interviewRound";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { env } from "@/env";
@@ -16,7 +16,7 @@ import {
 import {
   INTERVIEW_ROUND_OUTCOMES,
   INTERVIEW_ROUND_TYPES,
-} from "../../../server/src/schemas/interviewRound";
+} from "server/src/schemas/interviewRound";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";

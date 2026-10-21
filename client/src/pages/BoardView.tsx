@@ -5,7 +5,7 @@ import {
   APPLICATION_STATUSES,
   ApplicationRecordSchema,
   type ApplicationRecord,
-} from "../../../server/src/schemas/application";
+} from "server/src/schemas/application";
 import { env } from "@/env";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";

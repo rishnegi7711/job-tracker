@@ -2,7 +2,7 @@ import { formatDate } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "./ui/card";
 import DeleteApplicationDialog from "./DeleteApplicationDialog";
-import type { ApplicationRecord } from "../../../server/src/schemas/application";
+import type { ApplicationRecord } from "server/src/schemas/application";
 export type ApplicationCardProps = {
   application: ApplicationRecord;
 };
