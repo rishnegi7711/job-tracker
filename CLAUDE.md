@@ -83,5 +83,5 @@ Single-context: one `GLOSSARY.md` + `docs/adr/` at the repo root. See `docs/agen
 ### Install design skills
 
 `.claude/skills/` and `.agents/` are gitignored. After a fresh clone, reinstall from the repo root (Node 22+ and Chrome needed):
-- impeccable: `npx impeccable install --providers=claude --scope=project`. Update: `npx impeccable update`.
+- impeccable: `npx impeccable install --providers=claude --scope=project --no-hooks`. Update: `npx impeccable update`.
 - taste skill: `npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"`.
