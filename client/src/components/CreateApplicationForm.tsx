@@ -36,6 +36,10 @@ const createApplication = async (data: ApplicationInput) => {
     },
     body: JSON.stringify(data),
   });
+  if (!res.ok) {
+    const errorBody = await res.json();
+    throw new Error(errorBody.error || "Failed to create application");
+  }
   return res.json();
 };
 
