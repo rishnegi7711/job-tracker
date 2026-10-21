@@ -5,3 +5,5 @@ dist/
 *.log
 .DS_Store
 server/src/generated/prisma
+.claude/skills/impeccable/scripts/bin/
+.taste-skill/
