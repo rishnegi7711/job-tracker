@@ -2,10 +2,19 @@ import CreateApplicationForm from "./CreateApplicationForm";
 import { useState } from "react";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const TopBar = () => {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    queryClient.clear();
+    navigate("/login");
+  };
 
   return (
     <header className="border-b border-border">
@@ -16,10 +25,15 @@ const TopBar = () => {
         >
           Applyd
         </Link>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger render={<Button>Add application</Button>} />
-          <CreateApplicationForm onCreated={() => setOpen(false)} />
-        </Dialog>
+        <div className="flex items-center gap-2">
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger render={<Button>Add application</Button>} />
+            <CreateApplicationForm onCreated={() => setOpen(false)} />
+          </Dialog>
+          <Button variant="secondary" onClick={logout}>
+            Log out
+          </Button>
+        </div>
       </div>
     </header>
   );
