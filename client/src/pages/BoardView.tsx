@@ -1,13 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import KanbanColumn from "@/components/KanbanColumn";
 import TopBar from "@/components/TopBar";
-import { APPLICATION_STATUSES } from "../../../server/src/schemas/application";
+import {
+  APPLICATION_STATUSES,
+  ApplicationRecordSchema,
+  type ApplicationRecord,
+} from "../../../server/src/schemas/application";
 import { env } from "@/env";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
-import type { Application } from "@/lib/types";
 
-const fetchApplications = async (): Promise<Application[]> => {
+const fetchApplications = async (): Promise<ApplicationRecord[]> => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${env.VITE_API_URL}/api/applications`, {
     headers: {
@@ -18,7 +21,8 @@ const fetchApplications = async (): Promise<Application[]> => {
     const errorBody = await res.json();
     throw new Error(errorBody.error || "Failed to load applications");
   }
-  return res.json();
+  const data = await res.json();
+  return ApplicationRecordSchema.array().parse(data);
 };
 
 const BoardView = () => {

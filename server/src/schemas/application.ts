@@ -15,4 +15,11 @@ export const ApplicationSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const ApplicationRecordSchema = ApplicationSchema.extend({
+  id: z.string(),
+  userId: z.string(),
+  notes: z.string().nullable(),
+});
+
 export type ApplicationInput = z.infer<typeof ApplicationSchema>;
+export type ApplicationRecord = z.infer<typeof ApplicationRecordSchema>;

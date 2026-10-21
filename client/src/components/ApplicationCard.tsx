@@ -1,9 +1,9 @@
 import { formatDate } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "./ui/card";
-import type { Application } from "@/lib/types";
+import type { ApplicationRecord } from "../../../server/src/schemas/application";
 export type ApplicationCardProps = {
-  application: Application;
+  application: ApplicationRecord;
 };
 
 const ApplicationCard = ({ application }: ApplicationCardProps) => {

@@ -8,10 +8,12 @@ import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { env } from "@/env";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
+import type { ApplicationRecord } from "../../../server/src/schemas/application";
+import { ApplicationRecordSchema } from "../../../server/src/schemas/application";
 import type { InterviewRoundRecord } from "../../../server/src/schemas/interviewRound";
 import { InterviewRoundRecordSchema } from "../../../server/src/schemas/interviewRound";
 
-const fetchApplication = async (id: string) => {
+const fetchApplication = async (id: string): Promise<ApplicationRecord> => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -20,7 +22,8 @@ const fetchApplication = async (id: string) => {
     const errorBody = await res.json();
     throw new Error(errorBody.error || "Failed to fetch applications");
   }
-  return res.json();
+  const data = await res.json();
+  return ApplicationRecordSchema.parse(data);
 };
 
 const fetchRounds = async (id: string): Promise<InterviewRoundRecord[]> => {
@@ -69,7 +72,7 @@ const DetailView = () => {
         <ErrorState message="Failed to load interview rounds" />
       ) : (
         <div className="mx-auto max-w-7xl px-6 py-6 space-y-6">
-          <ApplicationHeader application={application} />
+          {application && <ApplicationHeader application={application} />}
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">Interview Rounds</h2>
             <AddRoundDialog applicationId={id as string} />
