@@ -4,15 +4,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { AuthField } from "@/components/AuthField";
+import MiniBoard from "@/components/MiniBoard";
 import z from "zod";
 import { env } from "@/env";
 import { Loader2 } from "lucide-react";
@@ -55,73 +48,83 @@ const RegisterPage = () => {
   const onSubmit = (data: RegisterInput) => {
     mutate(data);
   };
+
+  // Editing the email clears a stale server error.
+  const emailField = () => {
+    const r = register("email");
+    return {
+      ...r,
+      onChange: async (e: React.ChangeEvent<HTMLInputElement>) => {
+        await r.onChange(e);
+        if (isError) reset();
+      },
+    };
+  };
+
   return (
-    <div className="justify-center min-h-screen flex flex-col items-center">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold">Applyd</h1>
-        <p className="text-sm text-muted-foreground">
-          One board for every application
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-20 text-foreground">
+      <div className="w-full max-w-[360px]">
+        <div className="animate-rise motion-reduce:animate-none">
+          <div className="mb-8 flex size-9 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground">
+            A
+          </div>
+          <h1 className="font-serif text-[30px] leading-[1.1] font-semibold tracking-[-0.025em]">
+            Create your account
+          </h1>
+          <p className="mt-2 text-[15px] text-muted-foreground">
+            One board for every application.
+          </p>
+        </div>
+
+        <div className="mt-7">
+          <MiniBoard />
+        </div>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-7 flex animate-rise flex-col gap-4 motion-reduce:animate-none"
+          style={{ animationDelay: "150ms" }}
+        >
+          <AuthField
+            {...emailField()}
+            id="email"
+            label="Email"
+            type="email"
+            placeholder="you@email.com"
+            error={errors.email?.message}
+          />
+          <AuthField
+            {...register("password")}
+            id="password"
+            label="Password"
+            type="password"
+            error={errors.password?.message}
+          />
+          {isError && (
+            <p role="alert" className="text-sm text-destructive">
+              {error.message}
+            </p>
+          )}
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="mt-1 h-10 w-full gap-2 text-[15px] hover:bg-action-hover active:scale-[.98] disabled:opacity-70"
+          >
+            {isPending && <Loader2 className="size-4 animate-spin" />}
+            {isPending ? "Creating account" : "Create account"}
+          </Button>
+        </form>
+
+        <p className="mt-6 text-sm text-muted-foreground">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-foreground underline decoration-link-underline underline-offset-4 hover:decoration-foreground"
+          >
+            Log in
+          </Link>
         </p>
       </div>
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Register your account</CardTitle>
-          <CardDescription>
-            Enter your details below to register your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
-          >
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                {...register("email")}
-                onChange={async (e) => {
-                  await register("email").onChange(e);
-                  reset();
-                }}
-                type="email"
-                id="email"
-              />
-              {errors.email && (
-                <div className="text-red-500">{errors.email.message}</div>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="password">Password</Label>
-              <Input {...register("password")} type="password" id="password" />
-              {errors.password && (
-                <div className="text-red-500">{errors.password.message}</div>
-              )}
-            </div>
-
-            {isError && <p className="text-red-500 text-sm">{error.message}</p>}
-            <Button disabled={isPending} type="submit" className="w-full">
-              {isPending ? (
-                <>
-                  <Loader2 className="animate-spin size-4" />
-                  Registering User
-                </>
-              ) : (
-                "Register"
-              )}
-            </Button>
-          </form>
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              className="font-medium text-foreground underline-offset-4 hover:underline transition-colors"
-            >
-              Login
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 };
