@@ -10,6 +10,7 @@ colors:
   ink-subtle: "#6b675f"
   placeholder: "#77736b"
   line: "#ece8e0"
+  count-fill: "#ece8e0"
   field-border: "#8e8a81"
   link-underline: "#d3cfc6"
   action: "#37352f"
@@ -28,6 +29,10 @@ colors:
   status-rejected-tint: "#fde7e4"
   status-offer: "#496343"
   status-offer-tint: "#e6f1e3"
+  status-applied-dot: "#9a5b8c"
+  status-interviewing-dot: "#b07a1f"
+  status-rejected-dot: "#b5524a"
+  status-offer-dot: "#4f8a45"
   outcome-pending: "#625950"
   outcome-pending-tint: "#f0ece8"
   outcome-passed: "#496343"
@@ -42,6 +47,7 @@ colors:
   ink-subtle-dark: "#9a958c"
   placeholder-dark: "#a09b92"
   line-dark: "#3a3733"
+  count-fill-dark: "#33312d"
   field-border-dark: "#807b72"
   link-underline-dark: "#4a4640"
   action-dark: "#ece9e3"
@@ -60,6 +66,10 @@ colors:
   status-rejected-tint-dark: "#402e2b"
   status-offer-dark: "#adc6a7"
   status-offer-tint-dark: "#2c362a"
+  status-applied-dot-dark: "#d394c6"
+  status-interviewing-dot-dark: "#e2b45e"
+  status-rejected-dot-dark: "#ea8d82"
+  status-offer-dot-dark: "#8ccb82"
   outcome-pending-dark: "#c4bcb3"
   outcome-pending-tint-dark: "#35322f"
   outcome-passed-dark: "#adc6a7"
@@ -209,6 +219,7 @@ A warm paper palette with a single cool accent. Ratios are measured on the groun
 - **Paper** (`paper` #f9f8f6 / `paper-dark` #1c1b19): the page ground. Warm off-white in light; deep warm charcoal in dark, deliberately not pure black.
 - **Board** (`board` #f6f3ee / `board-dark` #242320): a tinted inset that groups cards, one step off the ground.
 - **Surface** (`surface` #ffffff / `surface-dark` #2d2b27): fields and cards. The lightest thing in light mode and the lifted thing in dark mode.
+- **Count fill** (`count-fill` #ece8e0 / `count-fill-dark` #33312d): the neutral chip behind a column's card count. `ink` text on it is 10.03:1 / 10.71:1, measured against the chip's own fill.
 
 ### Neutral (text)
 - **Ink** (`ink` #37352f / `ink-dark` #ece9e3): headings, body, field text. 11.6:1 on paper in light, 14.2:1 on paper in dark.
@@ -233,15 +244,17 @@ A warm paper palette with a single cool accent. Ratios are measured on the groun
 ### Status and outcome
 Muted, warm hues for application status and interview-round outcome. Each is a text colour (`status-*`, `outcome-*`) on a pale tint (`*-tint`), in both themes. The text colour reads at ≥4.5:1 on its tint and on every ground (paper, surface, board), so it also works without the tint.
 
-| Meaning | Hue | Light text / tint | Dark text / tint |
-|---|---|---|---|
-| Applied (`status-applied`) | stone | #625950 / #f0ece8 | #c4bcb3 / #35322f |
-| Interviewing (`status-interviewing`) | ochre | #735426 / #f8ebda | #d6b890 / #3c3122 |
-| Rejected (`status-rejected`) | rosewood | #7e4b45 / #fde7e4 | #e2b0a9 / #402e2b |
-| Offer (`status-offer`) | sage | #496343 / #e6f1e3 | #adc6a7 / #2c362a |
+| Meaning | Hue | Light text / tint | Dark text / tint | Dot (light / dark) |
+|---|---|---|---|---|
+| Applied (`status-applied`) | stone (dot: plum) | #625950 / #f0ece8 | #c4bcb3 / #35322f | #9a5b8c / #d394c6 |
+| Interviewing (`status-interviewing`) | ochre | #735426 / #f8ebda | #d6b890 / #3c3122 | #b07a1f / #e2b45e |
+| Rejected (`status-rejected`) | rosewood | #7e4b45 / #fde7e4 | #e2b0a9 / #402e2b | #b5524a / #ea8d82 |
+| Offer (`status-offer`) | sage | #496343 / #e6f1e3 | #adc6a7 / #2c362a | #4f8a45 / #8ccb82 |
 | Pending (`outcome-pending`) | stone | same values as Applied | same values as Applied |
 | Passed (`outcome-passed`) | sage | same values as Offer | same values as Offer |
 | Failed (`outcome-failed`) | rosewood | same values as Rejected | same values as Rejected |
+
+**Dots.** The column dots use the stronger `status-*-dot` tokens, because the text colours read as muted at 8px, especially in dark mode. Each dot is at least 3:1 on `board` and `surface` in both themes. Applied's dot is plum, so it is not grey and not blue; its column heading text stays `ink-subtle`. Dots are decorative: the status word is always next to them.
 
 Outcomes share values with statuses on purpose: waiting, good and bad read the same on the board and in a round's history. They stay separate tokens so either set can move without the other.
 
@@ -250,7 +263,7 @@ Outcomes share values with statuses on purpose: waiting, good and bad read the s
 
 **The One Blue Rule.** Blue means "you are here" (focus). It never fills a button, colours a link, or marks status.
 
-**The Muted Status Rule.** Status is a quiet tint with dark text, never a saturated fill. Status hues are warm (stone, ochre, rosewood, sage), and none is blue. The status word is always shown, so colour never carries meaning alone. Rosewood (rejected) is not `danger`: a rejection is an outcome, not an error.
+**The Muted Status Rule.** Status is a quiet tint with dark text, never a saturated fill. The one exception is the 8px column dot, which uses the stronger `status-*-dot` tokens. Status hues are warm (stone, ochre, rosewood, sage), and none is blue. The status word is always shown, so colour never carries meaning alone. Rosewood (rejected) is not `danger`: a rejection is an outcome, not an error.
 
 **The Contrast Floor Rule.** Every text token is at least 4.5:1 on the ground it sits on, and every input edge is at least 3:1. Decorative hairlines (`line`, `link-underline`) may fall below that, and must never be the only cue for something interactive.
 
@@ -376,6 +389,18 @@ A three-way segmented control in the TopBar: Light, Dark, System, shown as sun, 
 - **No flash:** an inline script in `index.html` reads `theme` before first paint and sets `.dark` on `<html>`, so a saved "dark" never flashes light on reload. `src/lib/theme.ts` applies the same rule when the choice changes; keep the two in step.
 - **System:** follows the OS and updates live when the OS setting changes. Light and Dark ignore the OS.
 
+### Board
+The Mini board at full size. Page container `max-w-7xl`, 32px top padding, same side gutters as the TopBar. Above it, the one serif `display` heading ("Applications") with a `body` count line in `ink-muted`. The board itself is the Mini board shell: `board` fill, `line` hairline, `xl` radius, 8px padding, four columns from 1024px, two from 768px, one below. Gaps are 8px.
+- **Motion:** cards use the `settle` motion from the Mini board. It plays once per page load, when the first data arrives, and not when you return from Detail, because those cards were already in place. A reload counts as a new load. Delay is `min(row, 6) × 90ms + column × 30ms`, so a long column never keeps cards hidden for more than about 0.7s. The animation only changes `transform` and `opacity`, so cost is the same however often it runs; the rule is about meaning, not performance.
+- **Reduced motion:** static.
+
+### Board column
+Overline heading in `ink-subtle`: an 8px dot in the column's `status-*-dot` token, then the status word in `ink-subtle`. The card count sits on the right as a chip, `ink` 12px/500 on `count-fill`, `md` radius. It is the same for every status, so the dot alone carries the status colour. The word is always shown. An empty column shows "No applications yet" in `ink-subtle` 12px inside a dashed `line` border.
+
+### Application card
+The Mini board card at reading size: `surface` fill, 1px `line` border, `md` radius, `card-shadow` at rest, 12px × 10px padding. Company in 14px/500 `ink`; role in 12px `ink-muted`; date in 12px `ink-subtle`, tabular. The whole card is one link. Hover moves the border to `field-border`; focus shows the `focus-ring` halo and the `accent-focus` border.
+- **Delete:** the existing destructive button, top right. On devices with hover it appears on card hover or focus-within; on touch it is always visible. Its own style is still to be designed.
+
 ### Page entrance
 Header and form rise 10px with a fade over 700ms on the same easing, the form delayed by 150ms. This runs once on load and never loops.
 
@@ -386,7 +411,7 @@ These exist in the app today but are not part of this system yet. Until each one
 - **Select**: status, round type and outcome pickers.
 - **Date input**: date applied and round date (native `type="date"`).
 - **Status and outcome badges**: colours are defined (Status and outcome, above); shape and size are not.
-- **Board, Detail**: whole surfaces.
+- **Detail**: whole surface.
 
 ## Do's and Don'ts
 

@@ -37,6 +37,7 @@ Bun workspaces: install once from the repo root (`bun install --frozen-lockfile`
 ## Gotchas
 
 - `bun run dev` hides type errors. Run `bun run build` (`tsc -b`) before calling a task done.
+- Animations that run once may not play in `bun run dev` (StrictMode double-mounts). Check them with `bun run build && bun run preview --port 5173`.
 - `fetch` doesn't reject on non-2xx. Guard `res.ok` on every fetch.
 - A return type is a claim, not a check. Only `.parse()` makes fetched data match its type.
 - Parse fetch responses with the record schema (`XRecordSchema`), not the input schema. `z.object()` strips unknown keys like `id`.

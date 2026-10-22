@@ -1,6 +1,4 @@
 import ApplicationCard from "./ApplicationCard";
-import { Badge } from "@/components/ui/badge";
-import { Empty, EmptyDescription } from "@/components/ui/empty";
 import { APPLICATION_STATUSES } from "server/src/schemas/application";
 import type { ApplicationCardProps } from "./ApplicationCard";
 
@@ -8,23 +6,50 @@ type Status = (typeof APPLICATION_STATUSES)[number];
 type KanbanColumnProps = {
   status: Status;
   applications: ApplicationCardProps["application"][];
+  index: number;
+  settle: boolean;
 };
 
-const KanbanColumn = ({ status, applications }: KanbanColumnProps) => {
+// Full class strings so Tailwind can see them.
+const STATUS_DOT: Record<Status, string> = {
+  Applied: "bg-status-applied-dot",
+  Interviewing: "bg-status-interviewing-dot",
+  Rejected: "bg-status-rejected-dot",
+  Offer: "bg-status-offer-dot",
+};
+
+const KanbanColumn = ({
+  status,
+  applications,
+  index,
+  settle,
+}: KanbanColumnProps) => {
   return (
-    <div className="flex min-w-0 flex-1 flex-col gap-4">
-      <div className="flex items-center justify-between px-1">
-        <h2 className="text-sm font-medium text-foreground">{status}</h2>
-        <Badge variant="secondary">{applications.length}</Badge>
+    <div className="flex min-w-0 flex-1 flex-col gap-2 p-1">
+      <div className="flex items-center justify-between px-1 pt-1">
+        <h2 className="flex items-center gap-2 text-[11px] font-medium tracking-wide text-ink-subtle uppercase">
+          <span aria-hidden className={`size-2 rounded-full ${STATUS_DOT[status]}`} />
+          {status}
+        </h2>
+        <span className="min-w-5 rounded-md bg-count-fill px-1.5 text-center text-xs font-medium text-foreground tabular-nums">
+          {applications.length}
+        </span>
       </div>
-      <div className="flex flex-1 flex-col gap-3">
+      <div className="flex flex-1 flex-col gap-2">
         {applications.length === 0 ? (
-          <Empty className="border border-dashed py-10">
-            <EmptyDescription>No applications yet</EmptyDescription>
-          </Empty>
+          <p className="rounded-md border border-dashed border-border py-6 text-center text-xs text-ink-subtle">
+            No applications yet
+          </p>
         ) : (
-          applications.map((application) => (
-            <ApplicationCard key={application.id} application={application} />
+          applications.map((application, row) => (
+            <ApplicationCard
+              key={application.id}
+              application={application}
+              // Capped so a long column never keeps cards hidden for seconds.
+              settleDelay={
+                settle ? Math.min(row, 6) * 90 + index * 30 : undefined
+              }
+            />
           ))
         )}
       </div>
