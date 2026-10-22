@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
-    --font-sans: "Inter", "Inter Fallback";
+    --font-sans: "Geist Variable", system-ui, sans-serif;
+    --font-serif: ui-serif, "New York", Georgia, serif;
 
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -17,6 +20,7 @@
     --color-chart-2: var(--chart-2);
     --color-chart-1: var(--chart-1);
     --color-ring: var(--ring);
+    --color-focus-ring: var(--focus-ring);
     --color-input: var(--input);
     --color-border: var(--border);
     --color-destructive: var(--destructive);
@@ -42,48 +46,32 @@
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
 }
+/* Paper tokens: see client/DESIGN.md. Light is :root, dark is .dark (set from the OS in index.html). */
 :root {
-    color-scheme: dark;
+    color-scheme: light;
 
-    /* Page background — deep near-black */
-    --background: oklch(0.11 0 0);
-    /* Primary text — near-white */
-    --foreground: oklch(0.96 0 0);
-
-    /* Card surface — slightly lifted dark */
-    --card: oklch(0.155 0 0);
-    --card-foreground: oklch(0.96 0 0);
-
-    --popover: oklch(0.155 0 0);
-    --popover-foreground: oklch(0.96 0 0);
-
-    /* Primary action — crisp white button */
-    --primary: oklch(0.97 0 0);
-    --primary-foreground: oklch(0.11 0 0);
-
-    /* Secondary / ghost */
-    --secondary: oklch(0.22 0 0);
-    --secondary-foreground: oklch(0.96 0 0);
-
-    /* Muted text & surfaces */
-    --muted: oklch(0.22 0 0);
-    --muted-foreground: oklch(0.55 0 0);
-
-    /* Accent — subtle indigo glow for focus rings */
-    --accent: oklch(0.6 0.18 264);
-    --accent-foreground: oklch(0.97 0 0);
-
-    /* Danger */
-    --destructive: oklch(0.62 0.21 27);
-
-    /* Borders & inputs */
-    --border: oklch(1 0 0 / 9%);
-    --input: oklch(1 0 0 / 8%);
-    --ring: oklch(0.6 0.18 264 / 60%);
+    --background: #f9f8f6;
+    --foreground: #37352f;
+    --card: #ffffff;
+    --card-foreground: #37352f;
+    --popover: #ffffff;
+    --popover-foreground: #37352f;
+    --primary: #37352f;
+    --primary-foreground: #ffffff;
+    --secondary: #f6f3ee;
+    --secondary-foreground: #37352f;
+    --muted: #f6f3ee;
+    --muted-foreground: #65625c;
+    --accent: #f6f3ee;
+    --accent-foreground: #37352f;
+    --destructive: #c53030;
+    --border: #ece8e0;
+    --input: #8e8a81;
+    --ring: #2383e2;
+    --focus-ring: rgba(35, 131, 226, 0.18);
 
     --radius: 0.5rem;
 
-    /* Sidebar (unused on this page but kept for consistency) */
     --sidebar: oklch(0.155 0 0);
     --sidebar-foreground: oklch(0.96 0 0);
     --sidebar-primary: oklch(0.6 0.18 264);
@@ -98,6 +86,30 @@
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
+}
+
+.dark {
+    color-scheme: dark;
+
+    --background: #1c1b19;
+    --foreground: #ece9e3;
+    --card: #2d2b27;
+    --card-foreground: #ece9e3;
+    --popover: #2d2b27;
+    --popover-foreground: #ece9e3;
+    --primary: #ece9e3;
+    --primary-foreground: #1c1b19;
+    --secondary: #242320;
+    --secondary-foreground: #ece9e3;
+    --muted: #242320;
+    --muted-foreground: #a8a39a;
+    --accent: #242320;
+    --accent-foreground: #ece9e3;
+    --destructive: #f28b82;
+    --border: #3a3733;
+    --input: #807b72;
+    --ring: #5aa5ee;
+    --focus-ring: rgba(90, 165, 238, 0.28);
 }
 
 @layer base {
