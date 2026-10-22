@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { AuthField } from "@/components/AuthField";
 import MiniBoard from "@/components/MiniBoard";
+import Wordmark from "@/components/Wordmark";
 import { Link } from "react-router-dom";
 import z from "zod";
 import { env } from "@/env";
@@ -78,8 +79,8 @@ const LoginPage = () => {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-20 text-foreground">
       <div className="w-full max-w-[360px]">
         <div className="animate-rise motion-reduce:animate-none">
-          <div className="mb-8 flex size-9 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground">
-            A
+          <div className="mb-8">
+            <Wordmark />
           </div>
           <h1 className="font-serif text-[30px] leading-[1.1] font-semibold tracking-[-0.025em]">
             Welcome back
