@@ -158,13 +158,33 @@ components:
     typography: "{typography.caption}"
     rounded: "{rounded.md}"
     padding: "6px 8px"
+  wordmark:
+    backgroundColor: "{colors.action}"
+    textColor: "{colors.on-action}"
+    typography: "{typography.display}"
+    rounded: "{rounded.lg}"
+    height: "48px"
+    padding: "0 20px"
+  wordmark-sm:
+    backgroundColor: "{colors.action}"
+    textColor: "{colors.on-action}"
+    rounded: "{rounded.lg}"
+    height: "36px"
+    padding: "0 12px"
+  theme-toggle:
+    backgroundColor: "{colors.board}"
+    rounded: "{rounded.lg}"
+    height: "36px"
+  theme-toggle-active:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
 ---
 
 # Design System: Applyd
 
-Extracted from `client/src/pages/prototype/LoginVariantA.tsx` ("Paper"), the chosen direction. Light is the default theme. Dark is a designed counterpart, not an inversion. Every colour below exists as a token in both themes (`-dark` suffix for dark), and each token is used once with one role.
+Extracted from `client/src/pages/prototype/LoginVariantA.tsx` ("Paper"), the chosen direction. Light and dark are both designed, and the app follows the OS until the user picks one (see Theme toggle). Dark is a designed counterpart, not an inversion. Every colour below exists as a token in both themes (`-dark` suffix for dark), and each token is used once with one role.
 
-**Scope.** This system was extracted from one screen, the login page. It is complete for that screen only. Each new surface (Board, Detail, dialogs, badges, TopBar) must extend this file when it is redesigned: add its components here, reusing these tokens and adding new tokens only in light/dark pairs. Components already in the app but not yet designed are listed under Components, "To be designed".
+**Scope.** This system was extracted from one screen, the login page. It is complete for that screen only. Each new surface (Board, Detail, dialogs, badges) must extend this file when it is redesigned: add its components here, reusing these tokens and adding new tokens only in light/dark pairs. Components already in the app but not yet designed are listed under Components, "To be designed".
 
 ## Overview
 
@@ -237,7 +257,7 @@ Outcomes share values with statuses on purpose: waiting, good and bad read the s
 **The Paired Token Rule.** Colours are only ever used through tokens, and each token has a light and a dark value. A hex literal in a component is a bug.
 
 ### shadcn mapping
-How the Paper tokens fill the shadcn variables in `client/src/index.css`. Today that file has one dark `:root` and no `.dark`. Adopting Paper means `:root` becomes the light column and a `.dark` block holds the dark column.
+How the Paper tokens fill the shadcn variables in `client/src/index.css`. `:root` holds the light column and a `.dark` block holds the dark column. The `dark` variant is class-based (`@custom-variant dark`).
 
 | Variable | `:root` (light) | `.dark` |
 |---|---|---|
@@ -264,13 +284,9 @@ How the Paper tokens fill the shadcn variables in `client/src/index.css`. Today 
 
 Notes:
 - `--accent` is shadcn's hover and highlight surface (menu items, ghost hover), so it maps to `board`, not blue. The incumbent indigo accent goes away under The One Blue Rule.
-- `--secondary` stays provisional until the secondary button is designed. `board` on `paper` has almost no edge.
+- `--secondary` stays provisional. The app has no secondary button now (Log out is an inline link), and `board` on `paper` has almost no edge.
 - `--sidebar-*` and `--chart-*` are defined but unused, so they are not mapped.
-- Known gaps for the redesign, not fixed here:
-  - shadcn fields are `bg-transparent` (paper shows through, not `surface`) and use `dark:bg-input/30`, which tints dark fields with `field-border-dark` instead of `surface-dark`.
-  - The focus halo is `ring-ring/50` where Paper's `focus-ring` is 18% / 28%.
-  - The destructive button's `bg-destructive/10` tint puts `danger` text at 4.44:1, under the Contrast Floor. Use a lighter tint or a solid fill when it is designed.
-  - No dark variant is wired up yet: there is no `.dark` block or `@custom-variant dark`, so `dark:` follows the OS setting.
+- The first three gaps found when Paper was adopted are fixed: fields fill with `surface` (`bg-card`), the focus halo uses the `focus-ring` token, and the destructive button uses a `/5` rest and `/8` hover tint (4.57:1 or better on paper and surface in both themes).
 
 ## Typography
 
@@ -325,7 +341,7 @@ Soft but not round. Fields, buttons, and the logo mark use `lg` (8px); board car
 - **Hover:** fill moves to `action-hover` (`action-hover-dark`), 150ms.
 - **Press:** scales to 0.98. **Disabled/pending:** 70% opacity, with a spinner in front of the label.
 - **Success state:** a check icon in front of "Signed in".
-- There is no secondary button yet. A secondary action is an inline link.
+- There is no secondary button. A secondary action is an inline link (Log out in the TopBar).
 
 ### Links
 - Ink text with a 1px `link-underline` at 4px offset. Hover darkens the underline to `ink`. No colour change to blue (see The One Blue Rule).
@@ -342,18 +358,35 @@ A tiny three-column board (Applied, Interview, Offer) that previews the product.
 - **Meaning:** on a successful sign-in, one card slides from Interview to Offer over 700ms on the same easing, and its border becomes `success`.
 - **Reduced motion:** the board renders in its end state with no animation.
 
+### Wordmark
+The product name as an ink box: `action` fill, `on-action` text, `lg` (8px) radius, Geist 600 with -0.025em tracking. It is the logo: there is no separate mark. The text is "Applyd", and screen readers get the word once.
+- **Large** (48px tall, 20px text, 20px side padding): the auth pages, 32px above the heading. Letters drop in like cards settling on the board: each letter uses the board's settle motion (16px above, fade, 600ms), staggered 40ms, once on load.
+- **Small** (36px tall, 16px text, 12px side padding): the TopBar. Static, because the TopBar remounts on every navigation and motion means placement.
+- **Reduced motion:** both render static.
+
+### TopBar
+`paper` ground with a 1px `line` hairline under it, 64px tall, content up to `max-w-7xl` with 24px side padding (16px under 640px). Left: the small Wordmark, linking to the board. Right, 12px apart (8px under 640px): Theme toggle, the primary "Add application" button at 36px tall ("Add" under 640px), and Log out as an inline link.
+- **Log out:** ink text with the `link-underline` rule, darkening to `ink` on hover, as in Links.
+- **Focus:** the Wordmark link and every control show the `focus-ring` halo.
+
+### Theme toggle
+A three-way segmented control in the TopBar: Light, Dark, System, shown as sun, moon and monitor icons (names are in the accessible label and tooltip). It is a native radio group, so arrow keys move the choice.
+- **Style:** `board` track, 1px `line` border, 8px radius, 36px tall, 28px segments. The selected segment is `surface` with `ink` icon; the others are `ink-muted` and move to `ink` on hover. Flat, no shadow.
+- **Storage:** the choice is saved in `localStorage` under `theme` (`light`, `dark`, or `system`; nothing saved means `system`). A blocked or invalid value falls back to `system`.
+- **No flash:** an inline script in `index.html` reads `theme` before first paint and sets `.dark` on `<html>`, so a saved "dark" never flashes light on reload. `src/lib/theme.ts` applies the same rule when the choice changes; keep the two in step.
+- **System:** follows the OS and updates live when the OS setting changes. Light and Dark ignore the OS.
+
 ### Page entrance
 Header and form rise 10px with a fade over 700ms on the same easing, the form delayed by 150ms. This runs once on load and never loops.
 
 ### To be designed
 These exist in the app today but are not part of this system yet. Until each one is designed, it renders through the shadcn mapping above. Do not invent specs for them; design each one when its surface is redesigned, and record it here.
-- **Secondary button**: Log out in the TopBar (`variant="secondary"`).
 - **Destructive button**: Delete, on the board card and detail page (`variant="destructive"`). See the contrast gap in the shadcn notes.
 - **Confirm dialog**: the delete confirmation, with an outline Cancel and a destructive confirm.
 - **Select**: status, round type and outcome pickers.
 - **Date input**: date applied and round date (native `type="date"`).
 - **Status and outcome badges**: colours are defined (Status and outcome, above); shape and size are not.
-- **TopBar, Board, Detail**: whole surfaces.
+- **Board, Detail**: whole surfaces.
 
 ## Do's and Don'ts
 

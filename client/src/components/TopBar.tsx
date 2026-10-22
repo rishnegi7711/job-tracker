@@ -2,6 +2,8 @@ import CreateApplicationForm from "./CreateApplicationForm";
 import { useState } from "react";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
+import ThemeToggle from "./ThemeToggle";
+import Wordmark from "./Wordmark";
 import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -17,20 +19,33 @@ const TopBar = () => {
   };
 
   return (
-    <header className="border-b border-border">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+    <header className="border-b border-border bg-background">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link
           to="/"
-          className="text-lg font-semibold tracking-tight text-foreground"
+          aria-label="Applyd, board"
+          className="rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-focus-ring"
         >
-          Applyd
+          <Wordmark size="sm" />
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle />
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger render={<Button>Add application</Button>} />
+            <DialogTrigger
+              render={
+                <Button className="h-9 px-4 hover:bg-action-hover active:scale-[.98]">
+                  <span className="sm:hidden">Add</span>
+                  <span className="hidden sm:inline">Add application</span>
+                </Button>
+              }
+            />
             <CreateApplicationForm onCreated={() => setOpen(false)} />
           </Dialog>
-          <Button variant="secondary" onClick={logout}>
+          <Button
+            variant="link"
+            onClick={logout}
+            className="px-1 text-foreground underline decoration-link-underline hover:decoration-foreground"
+          >
             Log out
           </Button>
         </div>
