@@ -21,6 +21,7 @@
     --color-chart-1: var(--chart-1);
     --color-ring: var(--ring);
     --color-focus-ring: var(--focus-ring);
+    --color-scrim: var(--scrim);
     --color-placeholder: var(--placeholder);
     --color-ink-subtle: var(--ink-subtle);
     --color-success: var(--success);
@@ -93,6 +94,7 @@
     --input: #8e8a81;
     --ring: #2383e2;
     --focus-ring: rgba(35, 131, 226, 0.18);
+    --scrim: rgba(55, 53, 47, 0.4);
     --placeholder: #77736b;
     --ink-subtle: #6b675f;
     --success: #2f7d6e;
@@ -158,6 +160,7 @@
     --input: #807b72;
     --ring: #5aa5ee;
     --focus-ring: rgba(90, 165, 238, 0.28);
+    --scrim: rgba(10, 9, 8, 0.6);
     --placeholder: #a09b92;
     --ink-subtle: #9a958c;
     --success: #5cc0ad;
