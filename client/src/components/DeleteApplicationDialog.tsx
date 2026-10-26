@@ -48,9 +48,9 @@ const DeleteApplicationDialog = ({
   return (
     <Dialog
       open={open}
-      onOpenChange={(next) => {
-        setOpen(next);
-        if (!next) reset();
+      onOpenChange={setOpen}
+      onOpenChangeComplete={(isOpen) => {
+        if (!isOpen) reset();
       }}
     >
       <DialogTrigger
