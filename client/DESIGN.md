@@ -23,6 +23,7 @@ colors:
   danger: "#c53030"
   success: "#2f7d6e"
   card-shadow: "rgba(55, 53, 47, 0.08)"
+  scrim: "rgba(55, 53, 47, 0.4)"
   status-applied: "#625950"
   status-applied-tint: "#f0ece8"
   status-interviewing: "#735426"
@@ -65,6 +66,7 @@ colors:
   danger-dark: "#f28b82"
   success-dark: "#5cc0ad"
   card-shadow-dark: "rgba(0, 0, 0, 0.4)"
+  scrim-dark: "rgba(10, 9, 8, 0.6)"
   status-applied-dark: "#c4bcb3"
   status-applied-tint-dark: "#35322f"
   status-interviewing-dark: "#d6b890"
@@ -103,6 +105,12 @@ typography:
     fontSize: "15px"
     fontWeight: 500
     lineHeight: 1.5
+  title:
+    fontFamily: "'Geist Variable', system-ui, sans-serif"
+    fontSize: "18px"
+    fontWeight: 600
+    lineHeight: 1.33
+    letterSpacing: "-0.01em"
   label:
     fontFamily: "'Geist Variable', system-ui, sans-serif"
     fontSize: "14px"
@@ -191,6 +199,32 @@ components:
     rounded: "{rounded.lg}"
     height: "36px"
     padding: "0 12px"
+  button-outline:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button}"
+    rounded: "{rounded.lg}"
+    height: "{spacing.control-height}"
+  button-outline-hover:
+    backgroundColor: "{colors.board}"
+  button-destructive:
+    backgroundColor: "{colors.danger}"
+    textColor: "{colors.danger}"
+    typography: "{typography.button}"
+    rounded: "{rounded.lg}"
+    height: "{spacing.control-height}"
+  dialog:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body}"
+    rounded: "{rounded.xl}"
+    padding: "24px"
+    width: "408px"
+  select-popup:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.lg}"
+    padding: "4px"
   theme-toggle:
     backgroundColor: "{colors.board}"
     rounded: "{rounded.lg}"
@@ -204,7 +238,7 @@ components:
 
 Extracted from `client/src/pages/prototype/LoginVariantA.tsx` ("Paper"), the chosen direction. Light and dark are both designed, and the app follows the OS until the user picks one (see Theme toggle). Dark is a designed counterpart, not an inversion. Every colour below exists as a token in both themes (`-dark` suffix for dark), and each token is used once with one role.
 
-**Scope.** This system was extracted from one screen, the login page. It is complete for that screen only. Each new surface (Board, Detail, dialogs, badges) must extend this file when it is redesigned: add its components here, reusing these tokens and adding new tokens only in light/dark pairs. Components already in the app but not yet designed are listed under Components, "To be designed".
+**Scope.** This system was extracted from one screen, the login page. It is complete for that screen only. Each new surface (Board, Detail, dialogs, badges) must extend this file when it is redesigned: add its components here, reusing these tokens and adding new tokens only in light/dark pairs. Every surface in the app is now designed.
 
 ## Overview
 
@@ -251,7 +285,8 @@ A warm paper palette with a single cool accent. Ratios are measured on the groun
 - **Focus blue** (`accent-focus` #2383e2 / `accent-focus-dark` #5aa5ee) and **Focus ring** (`focus-ring` rgba(35, 131, 226, 0.18) / `focus-ring-dark` rgba(90, 165, 238, 0.28)): the focused field's border and its 3px halo. 3.9:1 on surface / 5.4:1 on surface-dark.
 - **Danger** (`danger` #c53030 / `danger-dark` #f28b82): field errors and the failed-sign-in message. 5.2:1 on paper / 7.2:1 on paper-dark.
 - **Success** (`success` #2f7d6e / `success-dark` #5cc0ad): the border of a card that reached Offer. 4.9:1 on surface / 6.5:1 on surface-dark. It always comes with a position change, so it never carries meaning alone.
-- **Card shadow** (`card-shadow` rgba(55, 53, 47, 0.08) / `card-shadow-dark` rgba(0, 0, 0, 0.4)): the single resting shadow, under board cards.
+- **Card shadow** (`card-shadow` rgba(55, 53, 47, 0.08) / `card-shadow-dark` rgba(0, 0, 0, 0.4)): the resting shadow under board cards, and the base of the Dialog lift.
+- **Scrim** (`scrim` rgba(55, 53, 47, 0.4) / `scrim-dark` rgba(10, 9, 8, 0.6)): the dimmed layer behind a dialog. Warm, never pure black. Fades only; it has no blur.
 
 ### Status and outcome
 Muted, warm hues for application status and interview-round outcome. Each is a text colour (`status-*`, `outcome-*`) on a pale tint (`*-tint`), in both themes. The text colour reads at ≥4.5:1 on its tint and on every ground (paper, surface, board), so it also works without the tint.
@@ -311,7 +346,7 @@ Notes:
 - `--accent` is shadcn's hover and highlight surface (menu items, ghost hover), so it maps to `board`, not blue. The incumbent indigo accent goes away under The One Blue Rule.
 - `--secondary` stays provisional. The app has no secondary button now (Log out is an inline link), and `board` on `paper` has almost no edge.
 - `--sidebar-*` and `--chart-*` are defined but unused, so they are not mapped.
-- The first three gaps found when Paper was adopted are fixed: fields fill with `surface` (`bg-card`), the focus halo uses the `focus-ring` token, and the destructive button uses a `/5` rest and `/8` hover tint (4.57:1 or better on paper and surface in both themes).
+- The first three gaps found when Paper was adopted are fixed: fields fill with `surface` (`bg-card`), the focus halo uses the `focus-ring` token, and the destructive button uses a `/5` rest and `/8` hover tint (4.57:1 or better on paper and surface in both themes). See Buttons for how the dialogs finished it.
 
 ## Typography
 
@@ -322,6 +357,7 @@ Notes:
 
 ### Hierarchy
 - **Display** (600, 30px, 1.1, -0.025em): the screen title ("Welcome back"). One per screen.
+- **Title** (600, 18px, 1.33, -0.01em): dialog titles. Sans on purpose, so the page's serif heading stays the only serif even with a dialog open.
 - **Body** (400, 15px, 1.5): field text, subtitles, and support copy.
 - **Button** (500, 15px, 1.5): primary button text.
 - **Label** (500, 14px, 1.43): field labels above inputs.
@@ -346,13 +382,14 @@ Applyd's main screens (Board, Detail) are desktop-first and denser than this log
 Flat by default. In light mode, structure is a 1px `line` hairline plus one soft shadow under board cards (`0 1px 2px` in `card-shadow`). In dark mode, depth comes from tone instead: `paper-dark` is the lowest layer, `board-dark` sits one step up, and `surface-dark` one step above that. Shadows in dark mode are close to invisible, so do not rely on them.
 
 ### Shadow Vocabulary
-- **Card rest** (`box-shadow: 0 1px 2px {card-shadow}`): board cards only.
+- **Card rest** (`box-shadow: 0 1px 2px {card-shadow}`): board cards.
+- **Dialog lift** (`box-shadow: 0 12px 32px -8px {card-shadow}`): the dialog panel and the Select popup, the only things that float above the page. In dark mode the shadow is nearly invisible, so the panel is `surface-dark` on the scrim.
 - **Focus halo** (`box-shadow: 0 0 0 3px {focus-ring}`): the focused field, together with the border changing to `accent-focus`.
 
 ### Named Rules
 **The Lift-by-Lightness Rule.** In dark mode, raise a surface by making it lighter, never by adding a shadow.
 
-**The Flat-By-Default Rule.** Nothing floats at rest. Shadows exist only on board cards and as the focus halo.
+**The Flat-By-Default Rule.** Nothing floats at rest. Shadows exist only on board cards, as the focus halo, and as the Dialog lift on overlays that sit above the page.
 
 ## Shapes
 
@@ -366,7 +403,8 @@ Soft but not round. Fields, buttons, and the logo mark use `lg` (8px); board car
 - **Hover:** fill moves to `action-hover` (`action-hover-dark`), 150ms.
 - **Press:** scales to 0.98. **Disabled/pending:** 70% opacity, with a spinner in front of the label.
 - **Success state:** a check icon in front of "Signed in".
-- There is no secondary button. A secondary action is an inline link (Log out in the TopBar).
+- **Outline (secondary):** `surface` fill, 1px `field-border` edge (3:1, so it reads as a control), `ink` text, 15px/500. Hover fill moves to `board`. Used for Cancel in dialogs and for the Add round trigger (36px), so the detail page keeps one primary button. Inline links still serve quiet actions such as Log out.
+- **Destructive:** `danger` text on a `danger/5` tint (`danger/8` on hover) with a 1px `danger/30` edge, so it does not depend on the faint tint alone. 28px for the Delete trigger on the board card and detail header; 40px as the confirm button in a dialog. Focus is the standard blue halo, not a red one (One Blue Rule). It never fills solid.
 
 ### Links
 - Ink text with a 1px `link-underline` at 4px offset. Hover darkens the underline to `ink`. No colour change to blue (see The One Blue Rule).
@@ -375,7 +413,11 @@ Soft but not round. Fields, buttons, and the logo mark use `lg` (8px); board car
 - **Style:** `surface` fill, 1px `field-border`, 8px radius, 40px tall, 12px side padding, 15px text, `placeholder` hint.
 - **Focus:** border to `accent-focus` plus a 3px `focus-ring` halo, with no outline jump. Transition on box-shadow.
 - **Error:** message in `danger` at 12px directly under the field. The field edge stays `field-border`, and the text carries the error.
-- **Label:** above the field, 14px/500, 6px gap.
+- **Label:** above the field, 14px/500, 6px gap. An optional field adds "optional" after the label in `ink-subtle` 12px/400.
+- **Date input:** the native `type="date"`, styled as a field with tabular numbers. It has no `color-scheme` override, so the browser's picker follows the theme (`color-scheme` on `:root` and `.dark`). The calendar icon is 60% opacity, 100% on hover.
+- **Select:** the trigger is a full-width field with a 16px chevron in `ink-muted`; an unselected value shows `placeholder`. The popup is `surface` with a 1px `line` border, `lg` radius, 4px padding and the Dialog lift. Items are 14px with 6px × 8px padding and `md` radius; the highlighted item is `board`, and the selected item shows a check. The popup does not animate.
+- **Textarea:** a field with 88px minimum height, 10px × 12px padding, growing with content up to 200px, no manual resize.
+- **Server error:** one `danger` 14px line with `role="alert"`, directly above the footer, in the same place on every form.
 
 ### Mini board (signature component)
 A tiny three-column board (Applied, Interview, Offer) that previews the product. Inset `board` fill, `line` hairline, 11.2px radius, `overline` column headings in `ink-subtle`, and cards in `surface` with a `line` border and `card-shadow`.
@@ -411,7 +453,7 @@ Overline heading in `ink-subtle`: an 8px dot in the column's `status-*-dot` toke
 
 ### Application card
 The Mini board card at reading size: `surface` fill, 1px `line` border, `md` radius, `card-shadow` at rest, 12px × 10px padding. Company in 14px/500 `ink`; role in 12px `ink-muted`; date in 12px `ink-subtle`, tabular. The whole card is one link. Hover moves the border to `field-border`; focus shows the `focus-ring` halo and the `accent-focus` border.
-- **Delete:** the existing destructive button, top right. On devices with hover it appears on card hover or focus-within; on touch it is always visible. Its own style is still to be designed.
+- **Delete:** the existing destructive button, top right. On devices with hover it appears on card hover or focus-within; on touch it is always visible. It uses the small destructive button (see Buttons).
 
 ### Status and outcome badges
 A neutral chip with a coloured dot: `chip-fill`, `ink` 12px/500, 24px tall, `md` radius, 8px side padding, and an 8px dot 6px before the word. The dot is `status-*-dot` (Applied, Interviewing, Rejected, Offer) or `outcome-*-dot` (Pending, Passed, Failed); the chip never changes colour. The word is always shown. Static, no motion.
@@ -434,12 +476,14 @@ One box for every empty place (board column, notes, timeline): a 1px dashed `emp
 ### Page entrance
 Header and form rise 10px with a fade over 700ms on the same easing, the form delayed by 150ms. This runs once on load and never loops.
 
-### To be designed
-These exist in the app today but are not part of this system yet. Until each one is designed, it renders through the shadcn mapping above. Do not invent specs for them; design each one when its surface is redesigned, and record it here.
-- **Destructive button**: Delete, on the board card and detail page (`variant="destructive"`). See the contrast gap in the shadcn notes.
-- **Confirm dialog**: the delete confirmation, with an outline Cancel and a destructive confirm.
-- **Select**: status, round type and outcome pickers.
-- **Date input**: date applied and round date (native `type="date"`).
+### Dialog
+Used for Add application, Add round and Delete confirm. The panel is `surface` with a 1px `line` border, `xl` radius, 24px padding, 408px wide (never closer than 16px to the viewport edge) and centred, on the `scrim`. It carries the Dialog lift.
+- **Header:** the `title` (18px/600) with a 14px `ink-muted` description 6px under it. 28px to the form.
+- **Form:** fields 16px apart, as in Inputs / Fields. The Status and Date applied fields share a row.
+- **Footer:** 28px below the last field, no strip or divider. Cancel (outline) then the action (primary, or destructive for Delete), right-aligned, both 40px; under 640px they stack full width with the action on top. Submit buttons stay inside the `<form>`. While pending the action shows a spinner and its progressive label ("Adding").
+- **Closing:** Cancel, Esc or a click on the scrim. There is no X button. A server error is cleared when the dialog closes.
+- **Motion:** the panel fades from 0 and scales from 0.96 over 180ms on the board's easing, and leaves over 150ms ease-in. The scrim fades only. Reduced motion: no transition.
+- **Focus:** trapped inside; every control shows the blue halo.
 
 ## Do's and Don'ts
 
