@@ -4,7 +4,6 @@ import {
   type InterviewRoundInput,
 } from "server/src/schemas/interviewRound";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { env } from "@/env";
 import {
@@ -49,12 +48,12 @@ const createRoundForm = async (data: InterviewRoundInput, id: string) => {
   return res.json();
 };
 
+// The parent remounts this form (key) once the dialog has fully closed, which
+// puts the defaults back and clears errors without a visible reset.
 const AddRoundForm = ({
-  open,
   applicationId,
   onCreated,
 }: {
-  open: boolean;
   applicationId: string;
   onCreated: () => void;
 }) => {
@@ -62,32 +61,20 @@ const AddRoundForm = ({
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     control,
   } = useForm({
     resolver: zodResolver(InterviewRoundSchema),
     defaultValues: { outcome: "Pending", type: "Phone Screen" },
   });
   const queryClient = useQueryClient();
-  const {
-    mutate,
-    isPending,
-    isError,
-    error,
-    reset: resetMutation,
-  } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (data: InterviewRoundInput) =>
       createRoundForm(data, applicationId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["rounds", applicationId] });
-      reset({ type: "Phone Screen", outcome: "Pending", date: "" });
       onCreated();
     },
   });
-  // A stale server error shouldn't greet the next open.
-  useEffect(() => {
-    if (!open) resetMutation();
-  }, [open, resetMutation]);
   const onSubmit = (data: InterviewRoundInput) => {
     mutate(data);
   };

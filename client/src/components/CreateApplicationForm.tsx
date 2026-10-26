@@ -3,7 +3,6 @@ import {
   type ApplicationInput,
   APPLICATION_STATUSES,
 } from "server/src/schemas/application";
-import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -46,46 +45,24 @@ const createApplication = async (data: ApplicationInput) => {
   return res.json();
 };
 
-const CreateApplicationForm = ({
-  open,
-  onCreated,
-}: {
-  open: boolean;
-  onCreated: () => void;
-}) => {
+// The parent remounts this form (key) once the dialog has fully closed, which
+// clears the fields, field errors and server error without a visible reset.
+const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     control,
   } = useForm({ resolver: zodResolver(ApplicationSchema) });
   const queryClient = useQueryClient();
 
-  const {
-    mutate,
-    isPending,
-    isError,
-    error,
-    reset: resetMutation,
-  } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createApplication,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["applications"] });
-      reset({
-        company: "",
-        role: "",
-        status: undefined,
-        dateApplied: "",
-        notes: "",
-      });
       onCreated();
     },
   });
-  // A stale server error shouldn't greet the next open.
-  useEffect(() => {
-    if (!open) resetMutation();
-  }, [open, resetMutation]);
   const onSubmit = (data: ApplicationInput) => {
     mutate(data);
   };

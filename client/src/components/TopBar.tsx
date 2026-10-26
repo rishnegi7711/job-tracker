@@ -9,6 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const TopBar = () => {
   const [open, setOpen] = useState(false);
+  const [formKey, setFormKey] = useState(0);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -30,7 +31,13 @@ const TopBar = () => {
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog
+            open={open}
+            onOpenChange={setOpen}
+            onOpenChangeComplete={(isOpen) => {
+              if (!isOpen) setFormKey((k) => k + 1);
+            }}
+          >
             <DialogTrigger
               render={
                 <Button className="h-9 px-4 hover:bg-action-hover active:scale-[.98]">
@@ -39,7 +46,7 @@ const TopBar = () => {
                 </Button>
               }
             />
-            <CreateApplicationForm open={open} onCreated={() => setOpen(false)} />
+            <CreateApplicationForm key={formKey} onCreated={() => setOpen(false)} />
           </Dialog>
           <Button
             variant="link"
