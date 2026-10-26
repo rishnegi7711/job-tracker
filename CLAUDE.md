@@ -37,6 +37,7 @@ Bun workspaces: install once from the repo root (`bun install --frozen-lockfile`
 ## Gotchas
 
 - `bun run dev` hides type errors. Run `bun run build` (`tsc -b`) before calling a task done.
+- Animations that run once may not play in `bun run dev` (StrictMode double-mounts). Check them with `bun run build && bun run preview --port 5173`.
 - `fetch` doesn't reject on non-2xx. Guard `res.ok` on every fetch.
 - A return type is a claim, not a check. Only `.parse()` makes fetched data match its type.
 - Parse fetch responses with the record schema (`XRecordSchema`), not the input schema. `z.object()` strips unknown keys like `id`.
@@ -54,7 +55,7 @@ Bun workspaces: install once from the repo root (`bun install --frozen-lockfile`
 - Show me `git status` and the commit message before you commit.
 - Never `git add -A` or `git add .`. Stage files by name.
 - Never `git reset --hard` or force-push.
-- After pushing: run `git log -1` and confirm `HEAD -> main` and `origin/main` match.
+- After pushing: run `git log -1` and confirm `HEAD -> <current branch>` and `origin/<current branch>` match.
 - If git looks broken, stop and use read-only commands first (`git status`, `git log -1`, `git for-each-ref`). Fix refs with `git update-ref`.
 - Commit messages: conventional and short (`feat:`, `fix:`, `refactor:`, `chore:`, `test:`).
 - One concern per commit. Dependency bumps get their own `chore(deps):` commit.
@@ -79,3 +80,9 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: one `GLOSSARY.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Install design skills
+
+`.claude/skills/` and `.agents/` are gitignored. After a fresh clone, reinstall from the repo root (Node 22+ and Chrome needed):
+- impeccable: `npx impeccable install --providers=claude --scope=project --no-hooks`. Update: `npx impeccable update`.
+- taste skill: `npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"`.

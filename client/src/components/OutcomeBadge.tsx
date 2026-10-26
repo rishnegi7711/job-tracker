@@ -3,10 +3,11 @@ import { cn } from "@/lib/utils";
 
 type InterviewRoundOutcomeStatus = (typeof INTERVIEW_ROUND_OUTCOMES)[number];
 
-const OUTCOME_STYLES: Record<InterviewRoundOutcomeStatus, string> = {
-  Pending: "bg-secondary text-muted-foreground border-border",
-  Passed: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
-  Failed: "bg-red-500/10 text-red-400 border-red-500/25",
+// The dot carries the colour; the chip stays neutral.
+const OUTCOME_DOT: Record<InterviewRoundOutcomeStatus, string> = {
+  Pending: "bg-outcome-pending-dot",
+  Passed: "bg-outcome-passed-dot",
+  Failed: "bg-outcome-failed-dot",
 };
 
 const OutcomeBadge = ({
@@ -19,11 +20,11 @@ const OutcomeBadge = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium",
-        OUTCOME_STYLES[outcome],
+        "inline-flex h-6 items-center gap-1.5 rounded-md bg-chip-fill px-2 text-xs font-medium text-foreground",
         className,
       )}
     >
+      <span aria-hidden className={`size-2 rounded-full ${OUTCOME_DOT[outcome]}`} />
       {outcome}
     </span>
   );

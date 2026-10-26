@@ -48,9 +48,9 @@ const DeleteApplicationDialog = ({
   return (
     <Dialog
       open={open}
-      onOpenChange={(next) => {
-        setOpen(next);
-        if (!next) reset();
+      onOpenChange={setOpen}
+      onOpenChangeComplete={(isOpen) => {
+        if (!isOpen) reset();
       }}
     >
       <DialogTrigger
@@ -60,7 +60,7 @@ const DeleteApplicationDialog = ({
           </Button>
         }
       />
-      <DialogContent className="px-6 py-6">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete this application?</DialogTitle>
           <DialogDescription>
@@ -68,11 +68,16 @@ const DeleteApplicationDialog = ({
             interview rounds.
           </DialogDescription>
         </DialogHeader>
-        {isError && <div className="text-red-500">{error.message}</div>}
+        {isError && (
+          <p role="alert" className="-mt-3 text-sm text-destructive">
+            {error.message}
+          </p>
+        )}
         <DialogFooter>
-          <DialogClose render={<Button variant="outline">Cancel</Button>} />
+          <DialogClose render={<Button variant="outline" className="h-10 px-4">Cancel</Button>} />
           <Button
             variant="destructive"
+            className="h-10 gap-2 px-4 text-[15px]"
             disabled={isPending}
             onClick={() => mutate(applicationId)}
           >

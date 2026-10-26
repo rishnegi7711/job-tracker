@@ -6,15 +6,17 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BriefcaseIcon, PlusIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { FormField } from "./FormField";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -43,27 +45,21 @@ const createApplication = async (data: ApplicationInput) => {
   return res.json();
 };
 
+// The parent remounts this form (key) once the dialog has fully closed, which
+// clears the fields, field errors and server error without a visible reset.
 const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     control,
   } = useForm({ resolver: zodResolver(ApplicationSchema) });
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createApplication,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["applications"] });
-      reset({
-        company: "",
-        role: "",
-        status: undefined,
-        dateApplied: "",
-        notes: "",
-      });
       onCreated();
     },
   });
@@ -72,61 +68,30 @@ const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
   };
 
   return (
-    <DialogContent className="px-6 py-6">
-      <DialogHeader className="gap-1 px-6 pt-6 pb-5 border-b border-border/50">
-        <div className="flex items-center gap-2.5">
-          <span className="flex size-7 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <BriefcaseIcon className="size-4" />
-          </span>
-          <DialogTitle className="text-base font-semibold tracking-tight text-foreground">
-            Add Application
-          </DialogTitle>
-        </div>
-        <DialogDescription className="text-xs text-muted-foreground leading-relaxed pl-9">
-          Track a new opportunity in your pipeline
-        </DialogDescription>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Add application</DialogTitle>
+        <DialogDescription>Track a new opportunity in your pipeline</DialogDescription>
       </DialogHeader>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div className="flex flex-col gap-3">
-          <Label
-            htmlFor="company"
-            className="text-sm font-medium text-foreground/80"
-          >
-            Company
-          </Label>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <FormField id="company" label="Company" error={errors.company?.message}>
           <Input
             {...register("company")}
             id="company"
             placeholder="e.g Checkout"
+            aria-describedby={errors.company ? "company-error" : undefined}
           />
-          {errors.company && (
-            <div className="text-red-500">{errors.company.message}</div>
-          )}
-        </div>
-        <div className="flex flex-col gap-3">
-          <Label
-            htmlFor="role"
-            className="text-sm font-medium text-foreground/80"
-          >
-            Role
-          </Label>
+        </FormField>
+        <FormField id="role" label="Role" error={errors.role?.message}>
           <Input
             {...register("role")}
             id="role"
             placeholder="e.g Frontend Engineer"
+            aria-describedby={errors.role ? "role-error" : undefined}
           />
-          {errors.role && (
-            <div className="text-red-500">{errors.role.message}</div>
-          )}
-        </div>
+        </FormField>
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-3">
-            <Label
-              htmlFor="status"
-              className="text-sm font-medium text-foreground/80"
-            >
-              Status
-            </Label>
+          <FormField id="status" label="Status" error={errors.status?.message}>
             <Controller
               name="status"
               control={control}
@@ -136,7 +101,10 @@ const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
                   onValueChange={field.onChange}
                   value={field.value}
                 >
-                  <SelectTrigger id="status">
+                  <SelectTrigger
+                    id="status"
+                    aria-describedby={errors.status ? "status-error" : undefined}
+                  >
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -149,62 +117,39 @@ const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
                 </Select>
               )}
             />
-            {errors.status && (
-              <div className="text-red-500">{errors.status.message}</div>
-            )}
-          </div>
-          <div className="flex flex-col gap-3">
-            <Label
-              htmlFor="dateApplied"
-              className="text-sm font-medium text-foreground/80"
-            >
-              Date applied
-            </Label>
+          </FormField>
+          <FormField
+            id="dateApplied"
+            label="Date applied"
+            error={errors.dateApplied?.message}
+          >
             <Input
               id="dateApplied"
               type="date"
-              className="h-9 text-sm [color-scheme:dark]"
+              aria-describedby={
+                errors.dateApplied ? "dateApplied-error" : undefined
+              }
               {...register("dateApplied")}
             />
-            {errors.dateApplied && (
-              <div className="text-red-500">{errors.dateApplied.message}</div>
-            )}
-          </div>
+          </FormField>
         </div>
-        <div className="flex flex-col gap-3">
-          <Label
-            htmlFor="notes"
-            className="text-sm font-medium text-muted-foreground/80"
-          >
-            Notes
-            <span className="ml-1.5 text-xs font-normal text-muted-foreground">
-              optional
-            </span>
-          </Label>
-          <Textarea
-            id="notes"
-            className="resize-none text-sm leading-relaxed"
-            {...register("notes")}
-          />
-        </div>
-        <Button
-          type="submit"
-          className="mt-1 w-full h-9 text-sm font-medium gap-1.5"
-          disabled={isPending}
-        >
-          {" "}
-          {isPending ? (
-            <>
-              <Loader2 className="animate-spin size-4" />
-              Adding...
-            </>
-          ) : (
-            <>
-              {" "}
-              <PlusIcon data-icon="inline-start" /> Add Application{" "}
-            </>
-          )}{" "}
-        </Button>
+        <FormField id="notes" label="Notes" optional>
+          <Textarea id="notes" {...register("notes")} />
+        </FormField>
+        {isError && (
+          <p role="alert" className="text-sm text-destructive">
+            {error.message}
+          </p>
+        )}
+        <DialogFooter className="mt-3">
+          <DialogClose render={<Button type="button" variant="outline" className="h-10 px-4" />}>
+            Cancel
+          </DialogClose>
+          <Button type="submit" className="h-10 gap-2 px-4 text-[15px] hover:bg-action-hover" disabled={isPending}>
+            {isPending && <Loader2 className="size-4 animate-spin" />}
+            {isPending ? "Adding" : "Add application"}
+          </Button>
+        </DialogFooter>
       </form>
     </DialogContent>
   );
