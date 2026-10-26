@@ -422,7 +422,7 @@ Soft but not round. Fields, buttons, and the logo mark use `lg` (8px); board car
 ### Mini board (signature component)
 A tiny three-column board (Applied, Interview, Offer) that previews the product. Inset `board` fill, `line` hairline, 11.2px radius, `overline` column headings in `ink-subtle`, and cards in `surface` with a `line` border and `card-shadow`.
 - **Load:** cards drop in from 16px above with a fade, staggered 90ms apart, over 600ms on `cubic-bezier(0.2, 0.8, 0.2, 1)`.
-- **Meaning:** on a successful sign-in, one card slides from Interview to Offer over 700ms on the same easing, and its border becomes `success`.
+- **Meaning:** on a successful sign-in, one card slides from Interview to Offer over 300ms on the same easing, and its border becomes `success`. The redirect follows at 300ms, so the whole success beat is about 300ms. It redirects immediately under reduced motion. Keep the slide and the redirect delay in step (`REDIRECT_DELAY_MS` in `LoginPage.tsx`).
 - **Reduced motion:** the board renders in its end state with no animation.
 
 ### Wordmark

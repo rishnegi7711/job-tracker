@@ -33,8 +33,8 @@ const sendLoginData = async (data: LoginInput) => {
   }
   return res.json();
 };
-// Matches the 700ms card-to-Offer move in MiniBoard.
-const REDIRECT_DELAY_MS = 700;
+// Matches the 300ms card-to-Offer move in MiniBoard.
+const REDIRECT_DELAY_MS = 300;
 
 const LoginPage = () => {
   const navigate = useNavigate();

@@ -34,7 +34,7 @@ const MiniBoard = ({ won = false }: { won?: boolean }) => {
         return (
           <div
             key={c.n}
-            className="absolute transition-[left,top] duration-[600ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none"
+            className="absolute transition-[left,top] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none"
             style={{
               left: `calc(${c.col} * 33.333% + 6px)`,
               top: 26 + row * 34,
