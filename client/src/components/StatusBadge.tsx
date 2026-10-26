@@ -3,11 +3,12 @@ import { cn } from "@/lib/utils";
 
 export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
 
-const STATUS_STYLES: Record<ApplicationStatus, string> = {
-  Applied: "bg-sky-500/10 text-sky-400 border-sky-500/25",
-  Interviewing: "bg-amber-500/10 text-amber-400 border-amber-500/25",
-  Rejected: "bg-red-500/10 text-red-400 border-red-500/25",
-  Offer: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+// The dot carries the colour; the chip stays neutral. Full class strings so Tailwind can see them.
+const STATUS_DOT: Record<ApplicationStatus, string> = {
+  Applied: "bg-status-applied-dot",
+  Interviewing: "bg-status-interviewing-dot",
+  Rejected: "bg-status-rejected-dot",
+  Offer: "bg-status-offer-dot",
 };
 
 const StatusBadge = ({
@@ -20,11 +21,11 @@ const StatusBadge = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium",
-        STATUS_STYLES[status],
+        "inline-flex h-6 items-center gap-1.5 rounded-md bg-chip-fill px-2 text-xs font-medium text-foreground",
         className,
       )}
     >
+      <span aria-hidden className={`size-2 rounded-full ${STATUS_DOT[status]}`} />
       {status}
     </span>
   );

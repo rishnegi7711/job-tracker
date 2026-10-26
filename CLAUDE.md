@@ -55,7 +55,7 @@ Bun workspaces: install once from the repo root (`bun install --frozen-lockfile`
 - Show me `git status` and the commit message before you commit.
 - Never `git add -A` or `git add .`. Stage files by name.
 - Never `git reset --hard` or force-push.
-- After pushing: run `git log -1` and confirm `HEAD -> main` and `origin/main` match.
+- After pushing: run `git log -1` and confirm `HEAD -> <current branch>` and `origin/<current branch>` match.
 - If git looks broken, stop and use read-only commands first (`git status`, `git log -1`, `git for-each-ref`). Fix refs with `git update-ref`.
 - Commit messages: conventional and short (`feat:`, `fix:`, `refactor:`, `chore:`, `test:`).
 - One concern per commit. Dependency bumps get their own `chore(deps):` commit.

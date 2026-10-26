@@ -24,7 +24,12 @@
     --color-placeholder: var(--placeholder);
     --color-ink-subtle: var(--ink-subtle);
     --color-success: var(--success);
-    --color-count-fill: var(--count-fill);
+    --color-chip-fill: var(--chip-fill);
+    --color-empty-border: var(--empty-border);
+    --color-fresh: var(--fresh);
+    --color-outcome-pending-dot: var(--outcome-pending-dot);
+    --color-outcome-passed-dot: var(--outcome-passed-dot);
+    --color-outcome-failed-dot: var(--outcome-failed-dot);
     --color-status-applied-dot: var(--status-applied-dot);
     --color-status-interviewing-dot: var(--status-interviewing-dot);
     --color-status-rejected-dot: var(--status-rejected-dot);
@@ -99,7 +104,12 @@
     --status-rejected-tint: #fde7e4;
     --status-offer: #496343;
     --status-offer-tint: #e6f1e3;
-    --count-fill: #ece8e0;
+    --chip-fill: #ece8e0;
+    --empty-border: #b9b2a5;
+    --fresh: #f5ecda;
+    --outcome-pending-dot: #9a5b8c;
+    --outcome-passed-dot: #4f8a45;
+    --outcome-failed-dot: #b5524a;
     --status-applied-dot: #9a5b8c;
     --status-interviewing-dot: #b07a1f;
     --status-rejected-dot: #b5524a;
@@ -159,7 +169,12 @@
     --status-rejected-tint: #402e2b;
     --status-offer: #adc6a7;
     --status-offer-tint: #2c362a;
-    --count-fill: #33312d;
+    --chip-fill: #33312d;
+    --empty-border: #5c574f;
+    --fresh: #332c21;
+    --outcome-pending-dot: #d394c6;
+    --outcome-passed-dot: #8ccb82;
+    --outcome-failed-dot: #ea8d82;
     --status-applied-dot: #d394c6;
     --status-interviewing-dot: #e2b45e;
     --status-rejected-dot: #ea8d82;
@@ -173,11 +188,23 @@
 @theme {
     --animate-rise: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
     --animate-settle: settle 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    --animate-grow: grow 0.2s linear both;
+    --animate-fresh: fresh 1.2s ease-out both;
 
     @keyframes rise {
         from {
             opacity: 0;
             transform: translateY(10px);
+        }
+    }
+    @keyframes grow {
+        from {
+            transform: scaleY(0);
+        }
+    }
+    @keyframes fresh {
+        from {
+            background-color: var(--fresh);
         }
     }
     @keyframes settle {

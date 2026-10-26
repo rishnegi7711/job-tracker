@@ -1,4 +1,5 @@
 import ApplicationCard from "./ApplicationCard";
+import EmptyState from "./EmptyState";
 import { APPLICATION_STATUSES } from "server/src/schemas/application";
 import type { ApplicationCardProps } from "./ApplicationCard";
 
@@ -31,15 +32,15 @@ const KanbanColumn = ({
           <span aria-hidden className={`size-2 rounded-full ${STATUS_DOT[status]}`} />
           {status}
         </h2>
-        <span className="min-w-5 rounded-md bg-count-fill px-1.5 text-center text-xs font-medium text-foreground tabular-nums">
+        <span className="min-w-5 rounded-md bg-chip-fill px-1.5 text-center text-xs font-medium text-foreground tabular-nums">
           {applications.length}
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-2">
         {applications.length === 0 ? (
-          <p className="rounded-md border border-dashed border-border py-6 text-center text-xs text-ink-subtle">
-            No applications yet
-          </p>
+          <EmptyState>
+            <p className="text-xs text-ink-subtle">No applications yet</p>
+          </EmptyState>
         ) : (
           applications.map((application, row) => (
             <ApplicationCard

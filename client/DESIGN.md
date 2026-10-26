@@ -10,7 +10,9 @@ colors:
   ink-subtle: "#6b675f"
   placeholder: "#77736b"
   line: "#ece8e0"
-  count-fill: "#ece8e0"
+  chip-fill: "#ece8e0"
+  empty-border: "#b9b2a5"
+  fresh: "#f5ecda"
   field-border: "#8e8a81"
   link-underline: "#d3cfc6"
   action: "#37352f"
@@ -33,6 +35,9 @@ colors:
   status-interviewing-dot: "#b07a1f"
   status-rejected-dot: "#b5524a"
   status-offer-dot: "#4f8a45"
+  outcome-pending-dot: "#9a5b8c"
+  outcome-passed-dot: "#4f8a45"
+  outcome-failed-dot: "#b5524a"
   outcome-pending: "#625950"
   outcome-pending-tint: "#f0ece8"
   outcome-passed: "#496343"
@@ -47,7 +52,9 @@ colors:
   ink-subtle-dark: "#9a958c"
   placeholder-dark: "#a09b92"
   line-dark: "#3a3733"
-  count-fill-dark: "#33312d"
+  chip-fill-dark: "#33312d"
+  empty-border-dark: "#5c574f"
+  fresh-dark: "#332c21"
   field-border-dark: "#807b72"
   link-underline-dark: "#4a4640"
   action-dark: "#ece9e3"
@@ -70,6 +77,9 @@ colors:
   status-interviewing-dot-dark: "#e2b45e"
   status-rejected-dot-dark: "#ea8d82"
   status-offer-dot-dark: "#8ccb82"
+  outcome-pending-dot-dark: "#d394c6"
+  outcome-passed-dot-dark: "#8ccb82"
+  outcome-failed-dot-dark: "#ea8d82"
   outcome-pending-dark: "#c4bcb3"
   outcome-pending-tint-dark: "#35322f"
   outcome-passed-dark: "#adc6a7"
@@ -219,7 +229,9 @@ A warm paper palette with a single cool accent. Ratios are measured on the groun
 - **Paper** (`paper` #f9f8f6 / `paper-dark` #1c1b19): the page ground. Warm off-white in light; deep warm charcoal in dark, deliberately not pure black.
 - **Board** (`board` #f6f3ee / `board-dark` #242320): a tinted inset that groups cards, one step off the ground.
 - **Surface** (`surface` #ffffff / `surface-dark` #2d2b27): fields and cards. The lightest thing in light mode and the lifted thing in dark mode.
-- **Count fill** (`count-fill` #ece8e0 / `count-fill-dark` #33312d): the neutral chip behind a column's card count. `ink` text on it is 10.03:1 / 10.71:1, measured against the chip's own fill.
+- **Chip fill** (`chip-fill` #ece8e0 / `chip-fill-dark` #33312d): the one neutral fill behind every chip: a column's card count, the status badge and the outcome badge. `ink` text on it is 10.03:1 / 10.71:1, measured against the chip's own fill. Status colour never goes on the chip; the dot carries it.
+- **Empty border** (`empty-border` #b9b2a5 / `empty-border-dark` #5c574f): the dashed edge of every empty state. `line` was too faint for it (1.1:1 on `board`, 1.15:1 on `paper`). This is 1.9:1 / 2.0:1 in light and 2.2:1 / 2.4:1 in dark, on `board` / `paper`. It is decorative: the message inside carries the meaning, so it stays below the 3:1 input floor.
+- **Fresh** (`fresh` #f5ecda / `fresh-dark` #332c21): the brief highlight on a newly added round. `ink` is 10.45:1 / 11.38:1 on it and `ink-subtle` 4.8:1 / 4.63:1, so the card stays readable while it fades.
 
 ### Neutral (text)
 - **Ink** (`ink` #37352f / `ink-dark` #ece9e3): headings, body, field text. 11.6:1 on paper in light, 14.2:1 on paper in dark.
@@ -254,9 +266,9 @@ Muted, warm hues for application status and interview-round outcome. Each is a t
 | Passed (`outcome-passed`) | sage | same values as Offer | same values as Offer |
 | Failed (`outcome-failed`) | rosewood | same values as Rejected | same values as Rejected |
 
-**Dots.** The column dots use the stronger `status-*-dot` tokens, because the text colours read as muted at 8px, especially in dark mode. Each dot is at least 3:1 on `board` and `surface` in both themes. Applied's dot is plum, so it is not grey and not blue; its column heading text stays `ink-subtle`. Dots are decorative: the status word is always next to them.
+**Dots.** The column dots, and the dots in the status and outcome badges, use the stronger `status-*-dot` tokens, because the text colours read as muted at 8px, especially in dark mode. Each dot is at least 3:1 on `board` and `surface` in both themes. Applied's dot is plum, so it is not grey and not blue; its column heading text stays `ink-subtle`. Dots are decorative: the status word is always next to them.
 
-Outcomes share values with statuses on purpose: waiting, good and bad read the same on the board and in a round's history. They stay separate tokens so either set can move without the other.
+Outcome dots follow the same pairs as statuses (`outcome-pending-dot` = Applied's, `outcome-passed-dot` = Offer's, `outcome-failed-dot` = Rejected's), at ≥3:1 on `chip-fill` in both themes (3.0–4.0 in light, ≥5.3 in dark). Outcomes share values with statuses on purpose: waiting, good and bad read the same on the board and in a round's history. They stay separate tokens so either set can move without the other.
 
 ### Named Rules
 **The Warm Ground Rule.** No pure black or pure white as a page ground. Light paper is #f9f8f6 and dark paper is #1c1b19. Pure white is for fields and cards only.
@@ -395,11 +407,29 @@ The Mini board at full size. Page container `max-w-7xl`, 32px top padding, same 
 - **Reduced motion:** static.
 
 ### Board column
-Overline heading in `ink-subtle`: an 8px dot in the column's `status-*-dot` token, then the status word in `ink-subtle`. The card count sits on the right as a chip, `ink` 12px/500 on `count-fill`, `md` radius. It is the same for every status, so the dot alone carries the status colour. The word is always shown. An empty column shows "No applications yet" in `ink-subtle` 12px inside a dashed `line` border.
+Overline heading in `ink-subtle`: an 8px dot in the column's `status-*-dot` token, then the status word in `ink-subtle`. The card count sits on the right as a chip, `ink` 12px/500 on `chip-fill`, `md` radius. It is the same for every status, so the dot alone carries the status colour. The word is always shown. An empty column shows "No applications yet" in `ink-subtle` 12px in the shared Empty state.
 
 ### Application card
 The Mini board card at reading size: `surface` fill, 1px `line` border, `md` radius, `card-shadow` at rest, 12px × 10px padding. Company in 14px/500 `ink`; role in 12px `ink-muted`; date in 12px `ink-subtle`, tabular. The whole card is one link. Hover moves the border to `field-border`; focus shows the `focus-ring` halo and the `accent-focus` border.
 - **Delete:** the existing destructive button, top right. On devices with hover it appears on card hover or focus-within; on touch it is always visible. Its own style is still to be designed.
+
+### Status and outcome badges
+A neutral chip with a coloured dot: `chip-fill`, `ink` 12px/500, 24px tall, `md` radius, 8px side padding, and an 8px dot 6px before the word. The dot is `status-*-dot` (Applied, Interviewing, Rejected, Offer) or `outcome-*-dot` (Pending, Passed, Failed); the chip never changes colour. The word is always shown. Static, no motion.
+
+### Detail header
+Sits on the `paper` ground with no card. A quiet "← Board" link above (Links), then the one serif `display` heading (the company) with the role under it in `body` `ink-muted`. Delete is top right on the heading row; deleting returns to the board. Below: the status badge and "Applied {date}" in `ink-subtle` 12px. The page is a single `max-w-3xl` column with the same gutters as the TopBar.
+- **Notes:** an `overline` "Notes", then the text in `body` `ink`, line breaks kept. **Empty:** "No notes for this application." in `ink-subtle` 14px in the shared Empty state.
+
+### Timeline
+The page's centrepiece: the interview rounds, oldest at the top and newest at the bottom (by round date; same-day rounds keep the order they were added). A section heading "Interview rounds" (14px/500) with the count in `ink-subtle`, and the Add round button on the right.
+- **Round:** a 10px dot (`background` fill, 2px `field-border` ring) on a 1px `line` rail, then a card in `surface` with a `line` border, `md` radius, 12px × 10px padding and no shadow. The round type is 14px/500 `ink`, the date is 12px `ink-subtle`, and the outcome badge sits on the right.
+- **Open motion:** every time an application opens, the rail grows top to bottom and each round settles as the line reaches it. Total about 600ms: each round is staggered by `min(90ms, 600ms ÷ rounds)`, and each rail segment grows over one stagger. The `settle` motion and easing are the board's. Plays on every visit because the page is a new placement each time.
+- **Added round:** only the new round settles in, at once, and its card fades from `fresh` to `surface` over 1.2s. Existing rounds don't move.
+- **Reduced motion:** the finished timeline, static, no highlight.
+- **Empty:** "No interview rounds yet." in `ink` 14px with "Add one when it's scheduled." in `ink-subtle` 12px, in the shared Empty state. No illustration.
+
+### Empty state
+One box for every empty place (board column, notes, timeline): a 1px dashed `empty-border`, `md` radius, centred text, 24px × 16px padding, no fill. It has no fill on purpose: the board column already sits on the `board` fill, so a fill would vanish there. The message is `ink-subtle` (12px in a column, 14px for notes), and the timeline adds an `ink` headline above its hint. Static, no motion.
 
 ### Page entrance
 Header and form rise 10px with a fade over 700ms on the same easing, the form delayed by 150ms. This runs once on load and never loops.
@@ -410,8 +440,6 @@ These exist in the app today but are not part of this system yet. Until each one
 - **Confirm dialog**: the delete confirmation, with an outline Cancel and a destructive confirm.
 - **Select**: status, round type and outcome pickers.
 - **Date input**: date applied and round date (native `type="date"`).
-- **Status and outcome badges**: colours are defined (Status and outcome, above); shape and size are not.
-- **Detail**: whole surface.
 
 ## Do's and Don'ts
 
