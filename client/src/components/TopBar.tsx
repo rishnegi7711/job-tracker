@@ -39,7 +39,7 @@ const TopBar = () => {
                 </Button>
               }
             />
-            <CreateApplicationForm onCreated={() => setOpen(false)} />
+            <CreateApplicationForm open={open} onCreated={() => setOpen(false)} />
           </Dialog>
           <Button
             variant="link"

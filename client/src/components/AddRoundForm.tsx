@@ -4,6 +4,7 @@ import {
   type InterviewRoundInput,
 } from "server/src/schemas/interviewRound";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { env } from "@/env";
 import {
@@ -18,11 +19,13 @@ import {
   INTERVIEW_ROUND_TYPES,
 } from "server/src/schemas/interviewRound";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { FormField } from "./FormField";
 import { Input } from "@/components/ui/input";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -47,9 +50,11 @@ const createRoundForm = async (data: InterviewRoundInput, id: string) => {
 };
 
 const AddRoundForm = ({
+  open,
   applicationId,
   onCreated,
 }: {
+  open: boolean;
   applicationId: string;
   onCreated: () => void;
 }) => {
@@ -64,7 +69,13 @@ const AddRoundForm = ({
     defaultValues: { outcome: "Pending", type: "Phone Screen" },
   });
   const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
+  const {
+    mutate,
+    isPending,
+    isError,
+    error,
+    reset: resetMutation,
+  } = useMutation({
     mutationFn: (data: InterviewRoundInput) =>
       createRoundForm(data, applicationId as string),
     onSuccess: () => {
@@ -73,38 +84,35 @@ const AddRoundForm = ({
       onCreated();
     },
   });
+  // A stale server error shouldn't greet the next open.
+  useEffect(() => {
+    if (!open) resetMutation();
+  }, [open, resetMutation]);
   const onSubmit = (data: InterviewRoundInput) => {
     mutate(data);
   };
 
   return (
-    <DialogContent className="px-6 py-6">
-      <DialogHeader className="gap-1 px-6 pt-6 pb-5 border-b border-border/50">
-        <DialogTitle className="text-base font-semibold tracking-tight text-foreground">
-          Add interview round
-        </DialogTitle>
-        <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
-          Log a new round for this application
-        </DialogDescription>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Add interview round</DialogTitle>
+        <DialogDescription>Log a new round for this application</DialogDescription>
       </DialogHeader>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div className="flex flex-col gap-3">
-          <Label
-            htmlFor="type"
-            className="text-sm font-medium text-foreground/80"
-          >
-            Type
-          </Label>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <FormField id="type" label="Type" error={errors.type?.message}>
           <Controller
             name="type"
             control={control}
             render={({ field }) => (
               <Select
-                key={field.value}
+                key={field.value ?? "empty"}
                 onValueChange={field.onChange}
                 value={field.value}
               >
-                <SelectTrigger id="type">
+                <SelectTrigger
+                  id="type"
+                  aria-describedby={errors.type ? "type-error" : undefined}
+                >
                   <SelectValue placeholder="Select Interview type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -117,46 +125,29 @@ const AddRoundForm = ({
               </Select>
             )}
           />
-          {errors.type && (
-            <div className="text-red-500">{errors.type.message}</div>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <Label
-            htmlFor="date"
-            className="text-sm font-medium text-foreground/80"
-          >
-            Date
-          </Label>
+        </FormField>
+        <FormField id="date" label="Date" error={errors.date?.message}>
           <Input
             id="date"
             type="date"
-            className="h-9 text-sm [color-scheme:dark]"
+            aria-describedby={errors.date ? "date-error" : undefined}
             {...register("date")}
           />
-          {errors.date && (
-            <div className="text-red-500">{errors.date.message}</div>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <Label
-            htmlFor="outcome"
-            className="text-sm font-medium text-foreground/80"
-          >
-            Outcome
-          </Label>
+        </FormField>
+        <FormField id="outcome" label="Outcome" error={errors.outcome?.message}>
           <Controller
             name="outcome"
             control={control}
             render={({ field }) => (
               <Select
-                key={field.value}
+                key={field.value ?? "empty"}
                 onValueChange={field.onChange}
                 value={field.value}
               >
-                <SelectTrigger id="outcome">
+                <SelectTrigger
+                  id="outcome"
+                  aria-describedby={errors.outcome ? "outcome-error" : undefined}
+                >
                   <SelectValue placeholder="Select outcome" />
                 </SelectTrigger>
                 <SelectContent>
@@ -169,24 +160,21 @@ const AddRoundForm = ({
               </Select>
             )}
           />
-          {errors.outcome && (
-            <div className="text-red-500">{errors.outcome.message}</div>
-          )}
-        </div>
-
-        <Button
-          type="submit"
-          className="mt-1 w-full h-9 text-sm font-medium gap-1.5"
-          disabled={isPending}
-        >
-          {isPending ? (
-            <>
-              <Loader2 className="animate-spin size-4" /> Adding Round
-            </>
-          ) : (
-            "Add Round"
-          )}
-        </Button>
+        </FormField>
+        {isError && (
+          <p role="alert" className="text-sm text-destructive">
+            {error.message}
+          </p>
+        )}
+        <DialogFooter className="mt-3">
+          <DialogClose render={<Button type="button" variant="outline" className="h-10 px-4" />}>
+            Cancel
+          </DialogClose>
+          <Button type="submit" className="h-10 gap-2 px-4 text-[15px] hover:bg-action-hover" disabled={isPending}>
+            {isPending && <Loader2 className="size-4 animate-spin" />}
+            {isPending ? "Adding" : "Add round"}
+          </Button>
+        </DialogFooter>
       </form>
     </DialogContent>
   );

@@ -8,8 +8,9 @@ const AddRoundDialog = ({ applicationId }: { applicationId: string }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button>Add Round</Button>} />
+      <DialogTrigger render={<Button variant="outline" className="h-9 px-4">Add round</Button>} />
       <AddRoundForm
+        open={open}
         applicationId={applicationId}
         onCreated={() => setOpen(false)}
       />
