@@ -6,6 +6,7 @@ dist/
 .DS_Store
 server/src/generated/prisma
 .claude/skills/
-.claude/agents/
+.claude/agents/*
+!.claude/agents/reviewer.md
 .agents/
 .taste-skill/
