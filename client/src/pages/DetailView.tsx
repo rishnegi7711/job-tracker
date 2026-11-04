@@ -13,9 +13,10 @@ import type { ApplicationRecord } from "server/src/schemas/application";
 import { ApplicationRecordSchema } from "server/src/schemas/application";
 import type { InterviewRoundRecord } from "server/src/schemas/interviewRound";
 import { InterviewRoundRecordSchema } from "server/src/schemas/interviewRound";
+import { getToken } from "@/lib/token";
 
 const fetchApplication = async (id: string): Promise<ApplicationRecord> => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -28,7 +29,7 @@ const fetchApplication = async (id: string): Promise<ApplicationRecord> => {
 };
 
 const fetchRounds = async (id: string): Promise<InterviewRoundRecord[]> => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}/rounds`, {
     headers: { Authorization: `Bearer ${token}` },
   });

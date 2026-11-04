@@ -10,9 +10,10 @@ import {
 import { env } from "@/env";
 import LoadingState from "@/components/LoadingState";
 import ErrorState from "@/components/ErrorState";
+import { getToken } from "@/lib/token";
 
 const fetchApplications = async (): Promise<ApplicationRecord[]> => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await fetch(`${env.VITE_API_URL}/api/applications`, {
     headers: {
       Authorization: `Bearer ${token}`,

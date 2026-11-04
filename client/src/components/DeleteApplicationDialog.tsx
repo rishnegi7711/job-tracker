@@ -13,9 +13,10 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { env } from "@/env";
+import { getToken } from "@/lib/token";
 
 const deleteApplication = async (id: string) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
