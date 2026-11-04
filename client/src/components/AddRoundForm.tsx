@@ -29,9 +29,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
+import { getToken } from "@/lib/token";
 
 const createRoundForm = async (data: InterviewRoundInput, id: string) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
 
   const res = await fetch(`${env.VITE_API_URL}/api/applications/${id}/rounds`, {
     method: "POST",

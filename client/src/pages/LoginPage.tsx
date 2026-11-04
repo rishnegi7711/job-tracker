@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import z from "zod";
 import { env } from "@/env";
 import { Check, Loader2 } from "lucide-react";
+import { setToken } from "@/lib/token";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -47,7 +48,7 @@ const LoginPage = () => {
   const { mutate, isPending, isError, isSuccess, error, reset } = useMutation({
     mutationFn: sendLoginData,
     onSuccess: (data) => {
-      localStorage.setItem("token", data.token);
+      setToken(data.token);
     },
   });
 

@@ -6,6 +6,7 @@ import ThemeToggle from "./ThemeToggle";
 import Wordmark from "./Wordmark";
 import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { clearToken } from "@/lib/token";
 
 const TopBar = () => {
   const [open, setOpen] = useState(false);
@@ -14,7 +15,7 @@ const TopBar = () => {
   const navigate = useNavigate();
 
   const logout = () => {
-    localStorage.removeItem("token");
+    clearToken();
     queryClient.clear();
     navigate("/login");
   };

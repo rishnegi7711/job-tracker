@@ -27,9 +27,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { env } from "@/env";
+import { getToken } from "@/lib/token";
 
 const createApplication = async (data: ApplicationInput) => {
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const res = await fetch(`${env.VITE_API_URL}/api/applications`, {
     method: "POST",
     headers: {
