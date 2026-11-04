@@ -1,14 +1,16 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import AppErrorBoundary from "./components/AppErrorBoundary";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BoardView from "./pages/BoardView";
 import LoginPage from "./pages/LoginPage";
 import DetailView from "./pages/DetailView";
 import RegisterPage from "./pages/RegisterPage";
 
-function App() {
+export function AppRoutes() {
+  const { pathname } = useLocation();
   return (
-    <BrowserRouter>
+    <AppErrorBoundary resetKey={pathname}>
       <Routes>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
@@ -30,6 +32,14 @@ function App() {
         ></Route>
         <Route path="*" element={<Navigate to="/" replace />}></Route>
       </Routes>
+    </AppErrorBoundary>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }
