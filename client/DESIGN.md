@@ -409,6 +409,9 @@ Soft but not round. Fields, buttons, and the logo mark use `lg` (8px); board car
 ### Links
 - Ink text with a 1px `link-underline` at 4px offset. Hover darkens the underline to `ink`. No colour change to blue (see The One Blue Rule).
 
+### Error fallback
+Shown by `AppErrorBoundary` when a component throws in render. Centred in a `min-h-[60vh]` column on `paper`, 16px apart: a muted alert icon, the one serif heading ("Something went wrong", per The One Serif Rule), one muted sentence, the primary "Reload" button, then a "Back to the board" link in the standard link style. Reload takes initial focus (blue halo). The same tokens serve light and dark. Navigating to another route clears the error.
+
 ### Inputs / Fields
 - **Style:** `surface` fill, 1px `field-border`, 8px radius, 40px tall, 12px side padding, 15px text, `placeholder` hint.
 - **Focus:** border to `accent-focus` plus a 3px `focus-ring` halo, with no outline jump. Transition on box-shadow.

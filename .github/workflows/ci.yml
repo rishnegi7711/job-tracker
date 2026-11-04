@@ -42,3 +42,5 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run build
         working-directory: client
+      - run: bun run test --run
+        working-directory: client

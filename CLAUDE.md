@@ -19,7 +19,7 @@ Bun workspaces: install once from the repo root (`bun install --frozen-lockfile`
 - Test (run once): `cd server && bun run test --run`
 
 ### Done means
-- `bun run build` and `bun run test --run` pass in `server/` and `bun run build` passes in `client/`.
+- `bun run build` and `bun run test --run` pass in both `server/` and `client/`.
 - Plain `bun run test` is watch mode and never exits. Don't use it for checks.
 
 ## Conventions
