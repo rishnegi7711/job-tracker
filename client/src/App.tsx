@@ -7,7 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import DetailView from "./pages/DetailView";
 import RegisterPage from "./pages/RegisterPage";
 
-function AppRoutes() {
+export function AppRoutes() {
   const { pathname } = useLocation();
   return (
     <AppErrorBoundary resetKey={pathname}>
