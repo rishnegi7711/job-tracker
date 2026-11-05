@@ -88,25 +88,23 @@ const RegisterPage = () => {
           style={{ animationDelay: "150ms" }}
         >
           <FormField id="email" label="Email" error={errors.email?.message}>
-            <Input
-              {...emailField()}
-              id="email"
-              type="email"
-              placeholder="you@email.com"
-              aria-describedby={errors.email ? "email-error" : undefined}
-            />
+            {(a11y) => (
+              <Input
+                {...a11y}
+                {...emailField()}
+                type="email"
+                placeholder="you@email.com"
+              />
+            )}
           </FormField>
           <FormField
             id="password"
             label="Password"
             error={errors.password?.message}
           >
-            <Input
-              {...register("password")}
-              id="password"
-              type="password"
-              aria-describedby={errors.password ? "password-error" : undefined}
-            />
+            {(a11y) => (
+              <Input {...a11y} {...register("password")} type="password" />
+            )}
           </FormField>
           {isError && (
             <p role="alert" className="text-sm text-destructive">

@@ -102,25 +102,23 @@ const LoginPage = () => {
           style={{ animationDelay: "150ms" }}
         >
           <FormField id="email" label="Email" error={errors.email?.message}>
-            <Input
-              {...field("email")}
-              id="email"
-              type="email"
-              placeholder="you@email.com"
-              aria-describedby={errors.email ? "email-error" : undefined}
-            />
+            {(a11y) => (
+              <Input
+                {...a11y}
+                {...field("email")}
+                type="email"
+                placeholder="you@email.com"
+              />
+            )}
           </FormField>
           <FormField
             id="password"
             label="Password"
             error={errors.password?.message}
           >
-            <Input
-              {...field("password")}
-              id="password"
-              type="password"
-              aria-describedby={errors.password ? "password-error" : undefined}
-            />
+            {(a11y) => (
+              <Input {...a11y} {...field("password")} type="password" />
+            )}
           </FormField>
           {isError && (
             <p role="alert" className="text-sm text-destructive">

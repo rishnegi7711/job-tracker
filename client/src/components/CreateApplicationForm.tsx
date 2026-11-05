@@ -76,66 +76,62 @@ const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
       </DialogHeader>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField id="company" label="Company" error={errors.company?.message}>
-          <Input
-            {...register("company")}
-            id="company"
-            placeholder="e.g Checkout"
-            aria-describedby={errors.company ? "company-error" : undefined}
-          />
+          {(a11y) => (
+            <Input
+              {...a11y}
+              {...register("company")}
+              placeholder="e.g Checkout"
+            />
+          )}
         </FormField>
         <FormField id="role" label="Role" error={errors.role?.message}>
-          <Input
-            {...register("role")}
-            id="role"
-            placeholder="e.g Frontend Engineer"
-            aria-describedby={errors.role ? "role-error" : undefined}
-          />
+          {(a11y) => (
+            <Input
+              {...a11y}
+              {...register("role")}
+              placeholder="e.g Frontend Engineer"
+            />
+          )}
         </FormField>
         <div className="grid grid-cols-2 gap-4">
           <FormField id="status" label="Status" error={errors.status?.message}>
-            <Controller
-              name="status"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  key={field.value ?? "empty"}
-                  onValueChange={field.onChange}
-                  value={field.value}
-                >
-                  <SelectTrigger
-                    id="status"
-                    aria-describedby={errors.status ? "status-error" : undefined}
+            {(a11y) => (
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    key={field.value ?? "empty"}
+                    onValueChange={field.onChange}
+                    value={field.value}
                   >
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {APPLICATION_STATUSES.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
+                    <SelectTrigger {...a11y}>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {APPLICATION_STATUSES.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            )}
           </FormField>
           <FormField
             id="dateApplied"
             label="Date applied"
             error={errors.dateApplied?.message}
           >
-            <Input
-              id="dateApplied"
-              type="date"
-              aria-describedby={
-                errors.dateApplied ? "dateApplied-error" : undefined
-              }
-              {...register("dateApplied")}
-            />
+            {(a11y) => (
+              <Input {...a11y} type="date" {...register("dateApplied")} />
+            )}
           </FormField>
         </div>
         <FormField id="notes" label="Notes" optional>
-          <Textarea id="notes" {...register("notes")} />
+          {(a11y) => <Textarea {...a11y} {...register("notes")} />}
         </FormField>
         {isError && (
           <p role="alert" className="text-sm text-destructive">
