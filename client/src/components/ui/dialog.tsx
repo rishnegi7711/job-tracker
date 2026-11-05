@@ -40,7 +40,7 @@ function DialogOverlay({
 function DialogContent({
   className,
   children,
-  showCloseButton = false,
+  showCloseButton = true,
   ...props
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean

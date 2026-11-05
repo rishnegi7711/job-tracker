@@ -69,7 +69,7 @@ const CreateApplicationForm = ({ onCreated }: { onCreated: () => void }) => {
   };
 
   return (
-    <DialogContent>
+    <DialogContent showCloseButton={false}>
       <DialogHeader>
         <DialogTitle>Add application</DialogTitle>
         <DialogDescription>Track a new opportunity in your pipeline</DialogDescription>

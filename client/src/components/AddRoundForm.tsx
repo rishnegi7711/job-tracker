@@ -81,7 +81,7 @@ const AddRoundForm = ({
   };
 
   return (
-    <DialogContent>
+    <DialogContent showCloseButton={false}>
       <DialogHeader>
         <DialogTitle>Add interview round</DialogTitle>
         <DialogDescription>Log a new round for this application</DialogDescription>

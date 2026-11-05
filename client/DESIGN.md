@@ -484,7 +484,7 @@ Used for Add application, Add round and Delete confirm. The panel is `surface` w
 - **Header:** the `title` (18px/600) with a 14px `ink-muted` description 6px under it. 28px to the form.
 - **Form:** fields 16px apart, as in Inputs / Fields. The Status and Date applied fields share a row.
 - **Footer:** 28px below the last field, no strip or divider. Cancel (outline) then the action (primary, or destructive for Delete), right-aligned, both 40px; under 640px they stack full width with the action on top. Submit buttons stay inside the `<form>`. While pending the action shows a spinner and its progressive label ("Adding").
-- **Closing:** Cancel, Esc or a click on the scrim. There is no X button. A server error is cleared when the dialog closes.
+- **Closing:** Cancel, Esc or a click on the scrim. Dialogs with a Cancel button hide the X. A server error is cleared when the dialog closes.
 - **Motion:** the panel fades from 0 and scales from 0.96 over 180ms on the board's easing, and leaves over 150ms ease-in. The scrim fades only. Reduced motion: no transition.
 - **Focus:** trapped inside; every control shows the blue halo.
 
