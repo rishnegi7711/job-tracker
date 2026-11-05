@@ -170,6 +170,8 @@ router.get("/:id/rounds", protect, async (req: Request, res: Response) => {
     }
     const interviewRounds = await prisma.interviewRound.findMany({
       where: { applicationId },
+      // Oldest first. Ties on date break by id, which follows creation order.
+      orderBy: [{ date: "asc" }, { id: "asc" }],
     });
     res.status(200).json(interviewRounds);
   } catch (err) {

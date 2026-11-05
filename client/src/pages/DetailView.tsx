@@ -47,14 +47,10 @@ const fetchRounds = async (id: string): Promise<InterviewRoundRecord[]> => {
 // there when the application opened. Any other id was added since, and settles on its own.
 const RoundTimeline = ({ rounds }: { rounds: InterviewRoundRecord[] }) => {
   const [initialIds] = useState(() => new Set(rounds.map((r) => r.id)));
-  // Oldest first. Ties on date break by id, which follows creation order.
-  const ordered = [...rounds].sort(
-    (a, b) => a.date.getTime() - b.date.getTime() || a.id.localeCompare(b.id),
-  );
   // Open animation takes ~600ms in total, however many rounds there are.
-  const step = Math.min(90, 600 / Math.max(ordered.length, 1));
+  const step = Math.min(90, 600 / Math.max(rounds.length, 1));
 
-  return ordered.length === 0 ? (
+  return rounds.length === 0 ? (
     <EmptyState>
       <p className="text-sm text-foreground">No interview rounds yet.</p>
       <p className="mt-1 text-xs text-ink-subtle">
@@ -63,11 +59,11 @@ const RoundTimeline = ({ rounds }: { rounds: InterviewRoundRecord[] }) => {
     </EmptyState>
   ) : (
     <ol>
-      {ordered.map((round, index) => (
+      {rounds.map((round, index) => (
         <InterviewRoundItem
           key={round.id}
           round={round}
-          isLast={index === ordered.length - 1}
+          isLast={index === rounds.length - 1}
           delay={index * step}
           step={step}
           fresh={!initialIds.has(round.id)}
