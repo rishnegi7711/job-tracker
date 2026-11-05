@@ -61,7 +61,7 @@ const DeleteApplicationDialog = ({
           </Button>
         }
       />
-      <DialogContent>
+      <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Delete this application?</DialogTitle>
           <DialogDescription>
