@@ -88,66 +88,59 @@ const AddRoundForm = ({
       </DialogHeader>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField id="type" label="Type" error={errors.type?.message}>
-          <Controller
-            name="type"
-            control={control}
-            render={({ field }) => (
-              <Select
-                key={field.value ?? "empty"}
-                onValueChange={field.onChange}
-                value={field.value}
-              >
-                <SelectTrigger
-                  id="type"
-                  aria-describedby={errors.type ? "type-error" : undefined}
+          {(a11y) => (
+            <Controller
+              name="type"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  key={field.value ?? "empty"}
+                  onValueChange={field.onChange}
+                  value={field.value}
                 >
-                  <SelectValue placeholder="Select Interview type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {INTERVIEW_ROUND_TYPES.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
+                  <SelectTrigger {...a11y}>
+                    <SelectValue placeholder="Select Interview type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {INTERVIEW_ROUND_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          )}
         </FormField>
         <FormField id="date" label="Date" error={errors.date?.message}>
-          <Input
-            id="date"
-            type="date"
-            aria-describedby={errors.date ? "date-error" : undefined}
-            {...register("date")}
-          />
+          {(a11y) => <Input {...a11y} type="date" {...register("date")} />}
         </FormField>
         <FormField id="outcome" label="Outcome" error={errors.outcome?.message}>
-          <Controller
-            name="outcome"
-            control={control}
-            render={({ field }) => (
-              <Select
-                key={field.value ?? "empty"}
-                onValueChange={field.onChange}
-                value={field.value}
-              >
-                <SelectTrigger
-                  id="outcome"
-                  aria-describedby={errors.outcome ? "outcome-error" : undefined}
+          {(a11y) => (
+            <Controller
+              name="outcome"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  key={field.value ?? "empty"}
+                  onValueChange={field.onChange}
+                  value={field.value}
                 >
-                  <SelectValue placeholder="Select outcome" />
-                </SelectTrigger>
-                <SelectContent>
-                  {INTERVIEW_ROUND_OUTCOMES.map((outcome) => (
-                    <SelectItem key={outcome} value={outcome}>
-                      {outcome}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
+                  <SelectTrigger {...a11y}>
+                    <SelectValue placeholder="Select outcome" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {INTERVIEW_ROUND_OUTCOMES.map((outcome) => (
+                      <SelectItem key={outcome} value={outcome}>
+                        {outcome}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          )}
         </FormField>
         {isError && (
           <p role="alert" className="text-sm text-destructive">
