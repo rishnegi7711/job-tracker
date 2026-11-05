@@ -8,7 +8,8 @@ on:
 
 jobs:
   server:
-    runs-on: ubuntu-latest
+    # Pinned so a runner image change can't break CI unannounced; bump deliberately.
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: server
@@ -17,8 +18,8 @@ jobs:
       DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
       JWT_SECRET: ci-dummy-secret
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - uses: oven-sh/setup-bun@v2
@@ -30,10 +31,11 @@ jobs:
       - run: bun run test --run
 
   client:
-    runs-on: ubuntu-latest
+    # Pinned so a runner image change can't break CI unannounced; bump deliberately.
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - uses: oven-sh/setup-bun@v2
