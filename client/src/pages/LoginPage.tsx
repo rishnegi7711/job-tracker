@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { AuthField } from "@/components/AuthField";
+import { FormField } from "@/components/FormField";
+import { Input } from "@/components/ui/input";
 import MiniBoard from "@/components/MiniBoard";
 import Wordmark from "@/components/Wordmark";
 import { Link } from "react-router-dom";
@@ -100,21 +101,27 @@ const LoginPage = () => {
           className="mt-7 flex animate-rise flex-col gap-4 motion-reduce:animate-none"
           style={{ animationDelay: "150ms" }}
         >
-          <AuthField
-            {...field("email")}
-            id="email"
-            label="Email"
-            type="email"
-            placeholder="you@email.com"
-            error={errors.email?.message}
-          />
-          <AuthField
-            {...field("password")}
+          <FormField id="email" label="Email" error={errors.email?.message}>
+            <Input
+              {...field("email")}
+              id="email"
+              type="email"
+              placeholder="you@email.com"
+              aria-describedby={errors.email ? "email-error" : undefined}
+            />
+          </FormField>
+          <FormField
             id="password"
             label="Password"
-            type="password"
             error={errors.password?.message}
-          />
+          >
+            <Input
+              {...field("password")}
+              id="password"
+              type="password"
+              aria-describedby={errors.password ? "password-error" : undefined}
+            />
+          </FormField>
           {isError && (
             <p role="alert" className="text-sm text-destructive">
               {error.message}
