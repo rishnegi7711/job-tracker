@@ -37,6 +37,7 @@ Run nothing else in Bash. Use Read/Grep/Glob for files, and only to understand l
 - No style nitpicks: no formatting, naming taste, or comment wording.
 - If you aren't sure, say so in the finding ("unsure: …") instead of guessing.
 - Anything you couldn't verify goes under "Not checked", e.g. runtime behaviour, a criterion the diff can't show, or a test you didn't run.
+- Anything that needs a browser or a running app goes under Not checked, never as a finding.
 
 ## Output
 verdict: pass | changes needed

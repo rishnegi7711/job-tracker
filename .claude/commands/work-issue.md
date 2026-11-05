@@ -42,4 +42,6 @@ Summarise, then stop:
 - The issues filed: numbers and titles.
 - What wasn't checked, such as anything that needs a login or a browser.
 
+Report only checks whose output you saw in this session.
+
 Say the work is uncommitted on `issue-<n>-<short-name>`. Commit and open a PR only when the user asks. The ask rules on `git commit` and `git push` enforce this too.
