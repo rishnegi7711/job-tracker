@@ -1,7 +1,10 @@
 import { application, Request, Response, Router } from "express";
 import protect from "../middleware/protect";
 import prisma from "../lib/prisma";
-import { ApplicationSchema } from "../schemas/application";
+import {
+  ApplicationPatchSchema,
+  ApplicationSchema,
+} from "../schemas/application";
 import { InterviewRoundSchema } from "../schemas/interviewRound";
 
 const router = Router();
@@ -35,6 +38,13 @@ router.post("/", protect, async (req: Request, res: Response) => {
       data: {
         ...parsed.data,
         userId: req.userId,
+        statusChanges: {
+          create: {
+            status: parsed.data.status,
+            changedAt: parsed.data.dateApplied,
+            backfilled: false,
+          },
+        },
       },
     });
     res
@@ -100,7 +110,7 @@ router.patch("/:id", protect, async (req: Request, res: Response) => {
       });
       return;
     }
-    const partialApplication = ApplicationSchema.partial().safeParse(req.body);
+    const partialApplication = ApplicationPatchSchema.safeParse(req.body);
 
     if (!partialApplication.success) {
       res
@@ -108,10 +118,96 @@ router.patch("/:id", protect, async (req: Request, res: Response) => {
         .json({ error: partialApplication.error.flatten().fieldErrors });
       return;
     }
-    const updatedApplication = await prisma.application.update({
-      where: { id: applicationId },
-      data: partialApplication.data,
-    });
+    const { statusChangedAt, ...applicationData } = partialApplication.data;
+
+    if (statusChangedAt && !applicationData.status) {
+      res.status(400).json({
+        error: { statusChangedAt: ["statusChangedAt needs a status"] },
+      });
+      return;
+    }
+
+    const newStatus = applicationData.status;
+    const statusChanged =
+      newStatus !== undefined && newStatus !== application.status;
+    const newDateApplied = applicationData.dateApplied;
+    const dateAppliedChanged =
+      newDateApplied !== undefined &&
+      newDateApplied.getTime() !== application.dateApplied.getTime();
+    const effectiveDateApplied = newDateApplied ?? application.dateApplied;
+
+    // Only an explicit statusChangedAt is checked; with the same status it is ignored.
+    if (statusChanged && statusChangedAt) {
+      const latestAllowed = Date.now() + 24 * 60 * 60 * 1000;
+      if (statusChangedAt.getTime() > latestAllowed) {
+        res.status(400).json({
+          error: { statusChangedAt: ["Status date can't be in the future"] },
+        });
+        return;
+      }
+      if (statusChangedAt.getTime() < effectiveDateApplied.getTime()) {
+        res.status(400).json({
+          error: {
+            statusChangedAt: ["Status date can't be before the date applied"],
+          },
+        });
+        return;
+      }
+    }
+
+    const writes = [];
+    let firstRow: { id: string } | undefined;
+    if (dateAppliedChanged) {
+      const history = await prisma.statusChange.findMany({
+        where: { applicationId },
+        orderBy: [{ changedAt: "asc" }, { createdAt: "asc" }],
+      });
+      firstRow = history[0];
+      const laterRows = history.slice(1);
+      if (
+        laterRows.some(
+          (row) => row.changedAt.getTime() < newDateApplied.getTime(),
+        )
+      ) {
+        res.status(400).json({
+          error: {
+            dateApplied: [
+              "Date applied can't be after a later status change",
+            ],
+          },
+        });
+        return;
+      }
+    }
+
+    writes.push(
+      prisma.application.update({
+        where: { id: applicationId },
+        data: applicationData,
+      }),
+    );
+    if (firstRow) {
+      writes.push(
+        prisma.statusChange.update({
+          where: { id: firstRow.id },
+          data: { changedAt: newDateApplied },
+        }),
+      );
+    }
+    if (statusChanged) {
+      const today = new Date(new Date().toISOString().slice(0, 10));
+      writes.push(
+        prisma.statusChange.create({
+          data: {
+            applicationId,
+            status: newStatus,
+            changedAt: statusChangedAt ?? today,
+            backfilled: false,
+          },
+        }),
+      );
+    }
+    const [updatedApplication] = await prisma.$transaction(writes);
     res.status(200).json(updatedApplication);
   } catch (err) {
     console.error(err);
@@ -179,6 +275,42 @@ router.get("/:id/rounds", protect, async (req: Request, res: Response) => {
     res.status(500).json({ message: "Could not get interview rounds" });
   }
 });
+
+router.get(
+  "/:id/status-history",
+  protect,
+  async (req: Request, res: Response) => {
+    try {
+      const applicationId = req.params.id as string;
+      if (!req.userId) {
+        res.status(401).json({ error: "Not Authorized" });
+        return;
+      }
+      const parentApplication = await prisma.application.findUnique({
+        where: { id: applicationId },
+      });
+      if (!parentApplication) {
+        res.status(404).json({ error: "Application not found" });
+        return;
+      }
+      if (parentApplication.userId !== req.userId) {
+        res.status(403).json({
+          error: "Application can only be viewed by the authorised user",
+        });
+        return;
+      }
+      const statusChanges = await prisma.statusChange.findMany({
+        where: { applicationId },
+        // Oldest first. Same-day changes break the tie by when the row was written.
+        orderBy: [{ changedAt: "asc" }, { createdAt: "asc" }],
+      });
+      res.status(200).json(statusChanges);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Could not get status history" });
+    }
+  },
+);
 
 router.post("/:id/rounds", protect, async (req: Request, res: Response) => {
   try {
