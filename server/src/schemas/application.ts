@@ -15,6 +15,11 @@ export const ApplicationSchema = z.object({
   notes: z.string().optional(),
 });
 
+// PATCH body: any field of the form, plus the date a status change took effect.
+export const ApplicationPatchSchema = ApplicationSchema.partial().extend({
+  statusChangedAt: z.coerce.date().optional(),
+});
+
 export const ApplicationRecordSchema = ApplicationSchema.extend({
   id: z.string(),
   userId: z.string(),
