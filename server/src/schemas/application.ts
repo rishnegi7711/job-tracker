@@ -13,6 +13,7 @@ export const ApplicationSchema = z.object({
   status: z.enum(APPLICATION_STATUSES, { message: "Please select a status" }),
   dateApplied: z.coerce.date({ message: "Please select a date" }),
   notes: z.string().optional(),
+  postingText: z.string().max(20000).optional(),
 });
 
 // PATCH body: any field of the form, plus the date a status change took effect.
@@ -24,6 +25,7 @@ export const ApplicationRecordSchema = ApplicationSchema.extend({
   id: z.string(),
   userId: z.string(),
   notes: z.string().nullable(),
+  postingText: z.string().nullable(),
 });
 
 export type ApplicationInput = z.infer<typeof ApplicationSchema>;
