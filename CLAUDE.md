@@ -47,6 +47,7 @@ Bun workspaces: install once from the repo root (`bun install --frozen-lockfile`
 - `import "dotenv/config"` must be the first line of the server entry.
 - Shared Zod schemas in `server/src/schemas/` are bundled into the client by Vite. A file in `server/` isn't necessarily server code.
 - An unexpected `bun.lock` diff is a real change. Don't commit it with unrelated work.
+- `client/.env` / `client/.env.local` decide which server the browser calls; `server/.env` decides which database the server uses. Without `client/.env.local`, the local client calls Render, so local creates, edits and deletes hit production data. Local browser checks need the local server running and request URLs on `localhost`. Never test writes against Render.
 
 ## Git
 
