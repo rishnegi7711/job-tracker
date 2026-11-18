@@ -63,4 +63,17 @@ describe("ApplicationRecordSchema", () => {
     const result = ApplicationRecordSchema.safeParse(record);
     expect(result.success).toBe(true);
   });
+  it("accepts a record with no postingText key", () => {
+    const record = {
+      id: "app_1",
+      userId: "user_1",
+      company: "Google",
+      role: "Engineer",
+      status: "Applied",
+      dateApplied: "2026-01-01T00:00:00.000Z",
+      notes: null,
+    };
+    const result = ApplicationRecordSchema.safeParse(record);
+    expect(result.success).toBe(true);
+  });
 });

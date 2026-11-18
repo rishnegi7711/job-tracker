@@ -25,7 +25,7 @@ export const ApplicationRecordSchema = ApplicationSchema.extend({
   id: z.string(),
   userId: z.string(),
   notes: z.string().nullable(),
-  postingText: z.string().nullable(),
+  postingText: z.string().nullish(),
 });
 
 export type ApplicationInput = z.infer<typeof ApplicationSchema>;
