@@ -21,6 +21,7 @@ model Application {
   status          String
   dateApplied     DateTime         @default(now())
   notes           String?
+  postingText     String?
   userId          String
   user            User             @relation(fields: [userId], references: [id])
   interviewRounds InterviewRound[]
